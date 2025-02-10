@@ -230,7 +230,7 @@
         .then((userCredential) => {
           const user = userCredential.user;
           console.log("Usuario registrado:", user);
-          window.location.href = 'https://polyglots-at.github.io';
+          window.location.href = 'https://polyglots-at.github.io/cursos';
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -249,7 +249,7 @@
         .then((result) => {
           const user = result.user;
           console.log("Usuario autenticado:", user);
-          window.location.href = 'https://polyglots-at.github.io';
+          window.location.href = 'https://polyglots-at.github.io/cursos';
         })
         .catch((error) => {
           const errorCode = error.code;
