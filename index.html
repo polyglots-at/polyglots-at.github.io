@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto Políglotas</title>
+  <style>
+    /* Estilos generales */
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      background-color: #2563eb;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header fijo */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #000033;
+      padding: 10px 20px;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    /* Logo */
+    .logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Menú */
+    .menu {
+      display: flex;
+      gap: 20px;
+      margin-right: 30px;
+    }
+
+    .menu a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+    /* Contenedor principal */
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 20px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* Contenido principal */
+    .main-content {
+      margin-bottom: 40px;
+    }
+
+    .main-content h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    /* Botones circulares mejorados */
+    .options {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      margin: 30px 0;
+    }
+
+    .option-button {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      padding: 5px;
+      position: relative;
+    }
+
+    .option-button:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .option-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+
+    .option-button:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Texto descriptivo */
+    .option-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 51, 0.8);
+      color: white;
+      padding: 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 0 0 50% 50%;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #000033;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      width: 100%;
+    }
+
+    .creditos {
+      font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 15px;
+      }
+
+      .menu {
+        gap: 15px;
+        margin-right: 0;
+      }
+
+      .container {
+        padding: 80px 15px 30px;
+      }
+
+      .main-content h1 {
+        font-size: 28px;
+      }
+
+      .option-button {
+        width: 100px;
+        height: 100px;
+      }
+
+      .option-text {
+        font-size: 11px;
+        padding: 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .menu a {
+        font-size: 16px;
+      }
+
+      .option-button {
+        width: 85px;
+        height: 85px;
+      }
+
+      .option-text {
+        font-size: 10px;
+        padding: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">
+      <img src="https://polyglots-at.github.io/at/polyglots.jpg" alt="Logo Políglotas">
+    </a>
+    <nav class="menu">
+      <a href="registro.html">Registrarse</a>
+      <a href="login.html">Iniciar Sesión</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <h1>Bienvenido al Proyecto Políglotas</h1>
+      <p>Conecta con personas de todo el mundo y aprende idiomas de manera fácil y divertida.</p>
+    </div>
+
+    <div class="options">
+      <a href="https://polyglots-at.github.io/ex/descargas" class="option-button">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRys1BolDcorGTNMamKlhWGmuLDIlrkXsAx2w&s" alt="Libros">
+        <span class="option-text">Libros</span>
+      </a>
+      <a href="#" class="option-button">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTa9wWgthqOXt438IVMzbPIAmQhmhf71vmqrQ&s" alt="Artículos">
+        <span class="option-text">Artículos</span>
+      </a>
+      <a href="login.html" class="option-button">
+        <img src="data:image/jpeg;base64,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" alt="Cursos">
+        <span class="option-text">Polyglots</span>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="creditos">
+      &copy; 2024 Proyecto Políglotas. Todos los derechos reservados.
+    </div>
+  </footer>
+</body>
+</html>
