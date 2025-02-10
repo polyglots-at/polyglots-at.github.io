@@ -204,7 +204,7 @@
     auth.onAuthStateChanged((user) => {
       if (user) {
         console.log("Usuario autenticado:", user);
-        window.location.href = 'https://polyglots-at.github.io'; // Redirige al usuario si ya está autenticado
+        window.location.href = 'https://polyglots-at.github.io/cursos'; // Redirige al usuario si ya está autenticado
       } else {
         console.log("No hay usuario autenticado.");
       }
@@ -223,7 +223,7 @@
         .then((userCredential) => {
           const user = userCredential.user;
           console.log("Usuario autenticado:", user);
-          window.location.href = 'https://polyglots-at.github.io';
+          window.location.href = 'https://polyglots-at.github.io/cursos';
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -250,7 +250,7 @@
         .then((result) => {
           const user = result.user;
           console.log("Usuario autenticado:", user);
-          window.location.href = 'https://polyglots-at.github.io';
+          window.location.href = 'https://polyglots-at.github.io/cursos';
         })
         .catch((error) => {
           const errorCode = error.code;
