@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan de Estudios - Curso de Inglés Básico Gratuito</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .main-title {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: #3498db;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        
+        .course-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        .info-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2ecc71;
+            margin-bottom: 5px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+        
+        .modules-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .module {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #3498db;
+        }
+        
+        .module:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .module-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .module-number {
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .module-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #3498db;
+        }
+        
+        .module-topics {
+            list-style-type: none;
+            margin-top: 10px;
+        }
+        
+        .module-topics li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .module-topics li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        .learning-outcomes {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .outcomes-title {
+            font-size: 1.5rem;
+            color: #f39c12;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .outcome-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .outcome-icon {
+            color: #2ecc71;
+            font-size: 1.2rem;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        
+        .outcome-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        .methodology {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #9b59b6;
+        }
+        
+        .methodology-title {
+            font-size: 1.5rem;
+            color: #9b59b6;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .methodology-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .method-item {
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .method-icon {
+            font-size: 2.5rem;
+            color: #9b59b6;
+            margin-bottom: 10px;
+        }
+        
+        .method-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+        }
+        
+        .method-desc {
+            font-size: 0.9rem;
+            color: #b0b0b0;
+            line-height: 1.5;
+        }
+        
+        .cta-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .cta-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #50c878;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+        
+        .cta-button:hover {
+            background: #45b469;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid #3498db;
+        }
+        
+        .cta-button.secondary:hover {
+            background: rgba(52, 152, 219, 0.2);
+        }
+        
+        .icon-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        .icon-home img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: invert(100%);
+        }
+        
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.2rem;
+            }
+            
+            .modules-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-info {
+                gap: 15px;
+            }
+            
+            .info-card {
+                min-width: 120px;
+                padding: 10px 15px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .cta-button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="icon-home">
+        <a href="https://polyglots-at.github.io">
+            <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="Inicio">
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="main-title">PLAN DE ESTUDIOS COMPLETO</h1>
+            <p class="subtitle">Curso de Inglés Básico Gratuito- Método Relacional Polyglots</p>
+            <p class="subtitle">Domina los fundamentos del inglés con nuestra metodología paso a paso, diseñada para construir una base sólida y duradera.</p>
+            
+            <div class="course-info">
+                <div class="info-card">
+                    <div class="info-value">12</div>
+                    <div class="info-label">Módulos</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-value">50+</div>
+                    <div class="info-label">Lecciones</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-value">A1-A2</div>
+                    <div class="info-label">Nivel CEFR</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-value">8-10</div>
+                    <div class="info-label">Semanas</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modules-container">
+            <!-- MÓDULO 1 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">1</div>
+                    <div class="module-title">Fundamentos Básicos</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Pronombres Personales (I, you, he, she, it, we, they)</li>
+                    <li>Pronombres Posesivos (mine, yours, his, hers, ours, theirs)</li>
+                    <li>Verbo To Be (am, is, are)</li>
+                    <li>Artículos (a, an, the)</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 2 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">2</div>
+                    <div class="module-title">Descripción y Cualificación</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Adjetivos Básicos (good, bad, big, small)</li>
+                    <li>Adjetivos de Personalidad (happy, sad, friendly)</li>
+                    <li>Adjetivos de Color (red, blue, green, yellow)</li>
+                    <li>Posición de Adjetivos en la Oración</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 3 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">3</div>
+                    <div class="module-title">Acciones y Rutinas</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Verbos de Acción en Presente Simple</li>
+                    <li>Conjugación con Diferentes Pronombres</li>
+                    <li>Expresiones de Tiempo (every day, always, sometimes)</li>
+                    <li>Verbos de Actividades Diarias</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 4 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">4</div>
+                    <div class="module-title">Modificadores y Especificadores</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Adverbios de Frecuencia (always, often, sometimes)</li>
+                    <li>Adverbios de Modo (quickly, slowly, well)</li>
+                    <li>Adverbios de Lugar (here, there, everywhere)</li>
+                    <li>Posición de Adverbios en la Oración</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 5 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">5</div>
+                    <div class="module-title">Relaciones Espaciales y Temporales</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Preposiciones de Lugar (in, on, at, under)</li>
+                    <li>Preposiciones de Tiempo (in, on, at, for)</li>
+                    <li>Preposiciones de Movimiento (to, from, into)</li>
+                    <li>Uso Correcto de Preposiciones Comunes</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 6 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">6</div>
+                    <div class="module-title">Sustantivos y Plurales</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Sustantivos Comunes y Propios</li>
+                    <li>Formación de Plurales Regulares</li>
+                    <li>Plurales Irregulares (men, women, children)</li>
+                    <li>Sustantivos Contables e Incontables</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 7 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">7</div>
+                    <div class="module-title">Pasado Simple</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Verbo To Be en Pasado (was, were)</li>
+                    <li>Pasado Simple de Verbos Regulares</li>
+                    <li>Pasado Simple de Verbos Irregulares</li>
+                    <li>Expresiones de Tiempo Pasado (yesterday, last week)</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 8 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">8</div>
+                    <div class="module-title">Futuro y Planes</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Futuro con "Will" para decisiones espontáneas</li>
+                    <li>Futuro con "Going to" para planes</li>
+                    <li>Expresiones de Tiempo Futuro (tomorrow, next week)</li>
+                    <li>Diferencias entre Will y Going to</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 9 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">9</div>
+                    <div class="module-title">Habilidad y Posibilidad</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Verbos Modales (can, could, may, might)</li>
+                    <li>Expresar Habilidad con "Can"</li>
+                    <li>Pedir Permiso con "May" y "Could"</li>
+                    <li>Expresar Posibilidad con "Might"</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 10 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">10</div>
+                    <div class="module-title">Obligación y Consejo</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Verbos Modales (must, have to, should)</li>
+                    <li>Expresar Obligación con "Must" y "Have to"</li>
+                    <li>Dar Consejos con "Should"</li>
+                    <li>Diferencias entre Must y Have to</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 11 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">11</div>
+                    <div class="module-title">Comparaciones</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Comparativos de Superioridad e Inferioridad</li>
+                    <li>Superlativos</li>
+                    <li>Comparativos de Igualdad</li>
+                    <li>Comparativos Irregulares (good, bad, far)</li>
+                </ul>
+            </div>
+            
+            <!-- MÓDULO 12 -->
+            <div class="module">
+                <div class="module-header">
+                    <div class="module-number">12</div>
+                    <div class="module-title">Integración y Práctica</div>
+                </div>
+                <ul class="module-topics">
+                    <li>Presente Continuo para Acciones en Progreso</li>
+                    <li>Diferencias entre Presente Simple y Continuo</li>
+                    <li>Frases y Expresiones Cotidianas</li>
+                    <li>Integración de Todos los Temas Aprendidos</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="learning-outcomes">
+            <div class="outcomes-title">¿Qué Podrás Lograr al Completar Este Curso?</div>
+            <div class="outcomes-grid">
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Presentarte a ti mismo y a otros en inglés</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Describir personas, lugares y objetos básicos</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Hablar sobre tus rutinas diarias y hábitos</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Comprender y usar expresiones cotidianas</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Hacer preguntas simples y responderlas</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Comunicarte en situaciones sociales básicas</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Leer y comprender textos sencillos</div>
+                </div>
+                <div class="outcome-item">
+                    <div class="outcome-icon">✓</div>
+                    <div class="outcome-text">Escribir mensajes y descripciones básicas</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="methodology">
+            <div class="methodology-title">Nuestra Metodología de Enseñanza</div>
+            <div class="methodology-content">
+                <div class="method-item">
+                    <div class="method-icon">🔗</div>
+                    <div class="method-title">Enfoque Relacional</div>
+                    <div class="method-desc">Cada tema se conecta con los anteriores para construir conocimiento de forma natural y significativa.</div>
+                </div>
+                <div class="method-item">
+                    <div class="method-icon">🎯</div>
+                    <div class="method-title">Aprendizaje Contextual</div>
+                    <div class="method-desc">Aprende gramática y vocabulario en contextos reales y situaciones cotidianas.</div>
+                </div>
+                <div class="method-item">
+                    <div class="method-icon">🔄</div>
+                    <div class="method-title">Práctica Constante</div>
+                    <div class="method-desc">Ejercicios interactivos y repaso espaciado para consolidar lo aprendido.</div>
+                </div>
+                <div class="method-item">
+                    <div class="method-icon">📈</div>
+                    <div class="method-title">Progresión Medible</div>
+                    <div class="method-desc">Seguimiento claro de tu avance con evaluaciones y retroalimentación constante.</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-title">¿Listo para Comenzar tu Viaje en Inglés?</div>
+            <div class="cta-buttons">
+                <a href="https://polyglots-at.github.io/registro.html" class="cta-button">Comenzar Curso Ahora</a>
+                <a href="https://polyglots-at.github.io/ofertaacdemica.html" class="cta-button secondary">Explorar Más Cursos</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
