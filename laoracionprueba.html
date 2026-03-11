@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Estructura de la oración</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            ox-sizing: border-box;
+        }
+
+        body {
+            background: #2c5f8a;  /* azul más oscuro, suave para móvil */
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            color: #f0f7ff;
+            line-height: 1.5;
+            padding: 15px 12px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            border-radius: 40px;
+            padding: 25px 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid #a3cef1;
+        }
+
+        /* Encabezado */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1d4b6e;
+            border-radius: 60px;
+            padding: 12px 20px;
+            margin-bottom: 25px;
+            border: 2px solid #9ac7f0;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #e8f3ff;
+        }
+
+        .score {
+            background: #f4c542;
+            color: #1d3b4f;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+        }
+
+        .score span {
+            font-size: 1.8rem;
+            margin-left: 8px;
+        }
+
+        /* Módulos (páginas) */
+        .module {
+            display: none;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        /* Tarjetas de explicación */
+        .explain-card {
+            background: #e7f0fc;
+            color: #023047;
+            border-radius: 30px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 12px solid;
+            box-shadow: 0 8px 0 #1b4b6e;
+        }
+
+        .explain-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sujeto-border { border-left-color: #1f7ea3; }
+        .verbo-border { border-left-color: #2a8c5a; }
+        .objeto-border { border-left-color: #9b5fc0; }
+        .articulo-border { border-left-color: #d97706; }
+
+        .explain-text {
+            font-size: 1.15rem;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .comparison {
+            background: #d4e6f5;
+            border-radius: 18px;
+            padding: 15px;
+            margin: 18px 0;
+            border-left: 5px solid #f39c12;
+        }
+
+        .comparison strong {
+            color: #b45f06;
+        }
+
+        .example-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #ffffff90;
+            border-radius: 24px;
+            padding: 18px;
+            margin: 15px 0;
+        }
+
+        .example-item {
+            border-bottom: 1px solid #a0c4e2;
+            padding: 8px 0;
+        }
+
+        .en {
+            font-weight: 700;
+            color: #0a4b6e;
+            font-size: 1.2rem;
+        }
+
+        .es {
+            color: #2f506d;
+            font-style: italic;
+        }
+
+        .note {
+            background: #ffe8c8;
+            border-radius: 18px;
+            padding: 12px 16px;
+            color: #5e3a0c;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        /* Área de práctica */
+        .practice-box {
+            background: #f6faff;
+            border-radius: 36px;
+            padding: 22px;
+            margin: 25px 0;
+            border: 3px solid #7bb3e0;
+        }
+
+        .practice-title {
+            font-size: 1.7rem;
+            color: #0d4568;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #7bb3e0;
+            padding-bottom: 8px;
+        }
+
+        .question {
+            background: white;
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 0 #9bb8da;
+        }
+
+        .q-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #022b41;
+            margin-bottom: 18px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .option {
+            background: #e1effb;
+            border: 3px solid #7fb0da;
+            border-radius: 40px;
+            padding: 14px 6px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #013753;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .option.selected {
+            background: #b1d6ff;
+            border-color: #1f6396;
+            font-weight: 700;
+        }
+
+        .option.correct {
+            background: #b8e6c0;
+            border-color: #1d8545;
+        }
+
+        .option.incorrect {
+            background: #fbc1c1;
+            border-color: #b34141;
+        }
+
+        .btn-check {
+            background: #1f6396;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            margin-top: 18px;
+            padding: 16px;
+            border-radius: 22px;
+            background: #e9f3fb;
+            border-left: 8px solid;
+            color: #001d33;
+        }
+
+        .fb-good { border-color: #1d8545; background: #dcf5e3; }
+        .fb-bad { border-color: #b34141; background: #ffe1e1; }
+
+        .explanation-detail {
+            font-size: 1rem;
+            margin-top: 10px;
+            background: #cde1f2;
+            padding: 10px;
+            border-radius: 14px;
+        }
+
+        /* navegación */
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 25px 0 10px;
+        }
+
+        .nav-btn {
+            background: #1f4d70;
+            border: 3px solid #aad0f5;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            border-color: #7f9fbf;
+        }
+
+        .dot-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #608bbf;
+        }
+
+        .dot.active {
+            background: #f5d742;
+            box-shadow: 0 0 0 3px #ffd966;
+        }
+
+        .footer {
+            text-align: center;
+            color: #c5e2ff;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="header">
+        <h1>📘 Inglés · La oración</h1>
+        <div class="score">Puntos <span id="scoreDisplay">0</span></div>
+    </div>
+
+    <!-- Módulo 1: ¿Qué es una oración? Sujeto y verbo (desde cero) -->
+    <div id="mod1" class="module active">
+        <div class="explain-card sujeto-border">
+            <h2>🧩 1. La oración: sujeto y verbo</h2>
+            <div class="explain-text">
+                Una <strong>oración</strong> es un conjunto de palabras con sentido completo. En español y en inglés, lo mínimo que necesitamos es un <strong>sujeto</strong> (quien hace la acción) y un <strong>verbo</strong> (la acción).
+            </div>
+            <div class="comparison">
+                <strong>🇪🇸 En español:</strong> a veces omitimos el sujeto porque el verbo ya indica quién es: "(Yo) como".<br>
+                <strong>🇬🇧 En inglés:</strong> el sujeto es <span style="color:#b13e3e;">OBLIGATORIO</span>. El verbo no cambia lo suficiente: "Eat" puede ser yo, tú, nosotros... por eso debemos decir "I eat".
+            </div>
+            <div class="example-row">
+                <div class="example-item"><span class="en">I run</span> <span class="es">(Yo corro)</span></div>
+                <div class="example-item"><span class="en">She sings</span> <span class="es">(Ella canta)</span></div>
+                <div class="example-item"><span class="en">The dog barks</span> <span class="es">(El perro ladra)</span></div>
+            </div>
+            <div class="note">
+                📌 Nota: el sujeto puede ser un nombre (María), un pronombre (I, you) o un sustantivo con artículo (the cat).
+            </div>
+        </div>
+
+        <!-- Práctica 1: identificar sujeto y entender obligatoriedad -->
+        <div class="practice-box">
+            <div class="practice-title">✏️ Practica 1</div>
+            <!-- pregunta 1 -->
+            <div class="question" id="q1">
+                <div class="q-text">1. ¿Cuál es el SUJETO en "The children play"?</div>
+                <div class="options">
+                    <div class="option" data-correct="true">The children</div>
+                    <div class="option" data-correct="false">play</div>
+                    <div class="option" data-correct="false">children</div>
+                    <div class="option" data-correct="false">the</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(1)">Verificar</button>
+                <div class="feedback" id="fb1"></div>
+            </div>
+
+            <!-- pregunta 2 -->
+            <div class="question" id="q2">
+                <div class="q-text">2. En español decimos "Cocino pasta". ¿Cómo se dice correctamente en inglés?</div>
+                <div class="options">
+                    <div class="option" data-correct="false">Cook pasta</div>
+                    <div class="option" data-correct="true">I cook pasta</div>
+                    <div class="option" data-correct="false">Cooks pasta</div>
+                    <div class="option" data-correct="false">Pasta cook</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(2)">Verificar</button>
+                <div class="feedback" id="fb2"></div>
+            </div>
+        </div>
+
+        <!-- navegación -->
+        <div class="nav-row">
+            <button class="nav-btn" disabled>← anterior</button>
+            <div class="dot-container">
+                <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+            <button class="nav-btn" onclick="goToModule(2)">siguiente →</button>
+        </div>
+    </div>
+
+    <!-- Módulo 2: El verbo y el objeto (SVO) + artículos básicos -->
+    <div id="mod2" class="module">
+        <div class="explain-card verbo-border">
+            <h2>⚡ 2. Sujeto + Verbo + Objeto (SVO)</h2>
+            <div class="explain-text">
+                Muchas oraciones necesitan algo más: el <strong>objeto</strong> (la cosa que recibe la acción). El orden en inglés es <strong>SIEMPRE</strong>: <span style="background:#ffe68f; padding:3px 8px;">SUJETO → VERBO → OBJETO</span>.
+            </div>
+            <div class="comparison">
+                <strong>🇪🇸 Español:</strong> "Come manzanas María" (se entiende).<br>
+                <strong>🇬🇧 Inglés:</strong> "Eats apples Maria" no tiene sentido. Debe ser "Maria eats apples".
+            </div>
+            <div class="example-row">
+                <div class="example-item"><span class="en">The boy reads a book</span> <span class="es">(El niño lee un libro)</span></div>
+                <div class="example-item"><span class="en">She buys a car</span> <span class="es">(Ella compra un coche)</span></div>
+            </div>
+            <div class="note">
+                📌 Los artículos (a, an, the) acompañan al sustantivo. <strong>A/an</strong> = uno/una (no específico). <strong>The</strong> = el/la/los/las (específico).
+            </div>
+        </div>
+
+        <div class="practice-box">
+            <div class="practice-title">✏️ Practica 2 · orden y artículos</div>
+
+            <!-- pregunta 3: orden SVO -->
+            <div class="question" id="q3">
+                <div class="q-text">3. Ordena: "apples / eat / They"</div>
+                <div class="options">
+                    <div class="option" data-correct="false">Apples they eat</div>
+                    <div class="option" data-correct="true">They eat apples</div>
+                    <div class="option" data-correct="false">Eat they apples</div>
+                    <div class="option" data-correct="false">They apples eat</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(3)">Verificar</button>
+                <div class="feedback" id="fb3"></div>
+            </div>
+
+            <!-- pregunta 4: artículo a/an -->
+            <div class="question" id="q4">
+                <div class="q-text">4. Elige el artículo correcto: "___ elephant" (un elefante, no específico)</div>
+                <div class="options">
+                    <div class="option" data-correct="false">a</div>
+                    <div class="option" data-correct="true">an</div>
+                    <div class="option" data-correct="false">the</div>
+                    <div class="option" data-correct="false">ninguno</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(4)">Verificar</button>
+                <div class="feedback" id="fb4"></div>
+            </div>
+        </div>
+
+        <div class="nav-row">
+            <button class="nav-btn" onclick="goToModule(1)">← anterior</button>
+            <div class="dot-container"><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
+            <button class="nav-btn" onclick="goToModule(3)">siguiente →</button>
+        </div>
+    </div>
+
+    <!-- Módulo 3: Tipos de oración (afirmativa, negativa, pregunta) -->
+    <div id="mod3" class="module">
+        <div class="explain-card articulo-border">
+            <h2>🔄 3. Afirmar, negar, preguntar</h2>
+            <div class="explain-text">
+                El orden cambia cuando negamos o preguntamos. Aparecen los <strong>auxiliares</strong> (do/does).
+            </div>
+            <div class="example-row">
+                <div class="example-item"><span class="en">You like coffee.</span> <span class="es">afirmativa</span></div>
+                <div class="example-item"><span class="en">You do not (don't) like coffee.</span> <span class="es">negativa</span></div>
+                <div class="example-item"><span class="en">Do you like coffee?</span> <span class="es">pregunta</span></div>
+            </div>
+            <div class="note">
+                ⚠️ En negativa y pregunta, el verbo principal vuelve a su forma base (sin -s). El auxiliar "does" se usa para he/she/it.
+            </div>
+        </div>
+
+        <div class="practice-box">
+            <div class="practice-title">✏️ Practica 3 · diferentes órdenes</div>
+
+            <!-- pregunta 5: negativa -->
+            <div class="question" id="q5">
+                <div class="q-text">5. Convierte a negativa: "She speaks English."</div>
+                <div class="options">
+                    <div class="option" data-correct="false">She not speaks English.</div>
+                    <div class="option" data-correct="false">She doesn't speaks English.</div>
+                    <div class="option" data-correct="true">She does not speak English.</div>
+                    <div class="option" data-correct="false">She speak not English.</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(5)">Verificar</button>
+                <div class="feedback" id="fb5"></div>
+            </div>
+
+            <!-- pregunta 6: pregunta -->
+            <div class="question" id="q6">
+                <div class="q-text">6. Forma la pregunta: "They work hard."</div>
+                <div class="options">
+                    <div class="option" data-correct="false">Work they hard?</div>
+                    <div class="option" data-correct="true">Do they work hard?</div>
+                    <div class="option" data-correct="false">They do work hard?</div>
+                    <div class="option" data-correct="false">Are they work hard?</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(6)">Verificar</button>
+                <div class="feedback" id="fb6"></div>
+            </div>
+        </div>
+
+        <div class="nav-row">
+            <button class="nav-btn" onclick="goToModule(2)">← anterior</button>
+            <div class="dot-container"><span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span></div>
+            <button class="nav-btn" onclick="goToModule(4)">siguiente →</button>
+        </div>
+    </div>
+
+    <!-- Módulo 4: Más sobre artículos y usos específicos -->
+    <div id="mod4" class="module">
+        <div class="explain-card objeto-border">
+            <h2>📚 4. Los artículos a / an / the en detalle</h2>
+            <div class="explain-text">
+                <strong>A / AN</strong> (indefinido): se usa para hablar de algo por primera vez, o algo no específico. "A" antes de consonante, "AN" antes de sonido vocálico.<br>
+                <strong>THE</strong> (definido): cuando ambos (hablante y oyente) saben de qué se habla.
+            </div>
+            <div class="comparison">
+                <strong>🇪🇸 En español:</strong> un/una / el/la. Misma idea. Pero en inglés se usa más "the" que en español.
+            </div>
+            <div class="example-row">
+                <div class="example-item"><span class="en">I saw a cat. The cat was black.</span> <span class="es">(Vi un gato. El gato era negro.)</span></div>
+                <div class="example-item"><span class="en">an hour</span> (la h no se pronuncia, suena "auer" → vocal)</div>
+            </div>
+        </div>
+
+        <div class="practice-box">
+            <div class="practice-title">✏️ Practica 4 · elige el artículo</div>
+
+            <!-- pregunta 7 -->
+            <div class="question" id="q7">
+                <div class="q-text">7. "___ honest person" (una persona honesta)</div>
+                <div class="options">
+                    <div class="option" data-correct="false">a</div>
+                    <div class="option" data-correct="true">an</div>
+                    <div class="option" data-correct="false">the</div>
+                    <div class="option" data-correct="false">ninguno</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(7)">Verificar</button>
+                <div class="feedback" id="fb7"></div>
+            </div>
+
+            <!-- pregunta 8 -->
+            <div class="question" id="q8">
+                <div class="q-text">8. "I have ___ apple and ___ orange."</div>
+                <div class="options">
+                    <div class="option" data-correct="false">a / a</div>
+                    <div class="option" data-correct="true">an / an</div>
+                    <div class="option" data-correct="false">a / an</div>
+                    <div class="option" data-correct="false">an / a</div>
+                </div>
+                <button class="btn-check" onclick="checkAnswer(8)">Verificar</button>
+                <div class="feedback" id="fb8"></div>
+            </div>
+        </div>
+
+        <div class="nav-row">
+            <button class="nav-btn" onclick="goToModule(3)">← anterior</button>
+            <div class="dot-container"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span></div>
+            <button class="nav-btn" onclick="showResults()">finalizar</button>
+        </div>
+    </div>
+
+    <!-- Módulo 5: resultados -->
+    <div id="mod5" class="module">
+        <div style="background: #eaf3fc; border-radius: 40px; padding: 30px; text-align: center; color: #023b5e;">
+            <h2 style="font-size: 2.5rem;">📌 completado</h2>
+            <p style="font-size: 2rem; margin: 20px;">puntos: <strong id="finalScore">0</strong></p>
+            <p>Has aprendido la estructura de la oración y los artículos comparando inglés y español.</p>
+            <button class="nav-btn" onclick="restart()" style="margin-top: 20px;">↻ repasar</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Políglotas
+    </div>
+</div>
+
+<script>
+    // Variables globales
+    let score = 0;
+    let answered = {};  // para no repetir puntuación
+
+    // Mapa de respuestas correctas (texto exacto)
+    const correctAnswers = {
+        1: 'The children',
+        2: 'I cook pasta',
+        3: 'They eat apples',
+        4: 'an',
+        5: 'She does not speak English.',
+        6: 'Do they work hard?',
+        7: 'an',
+        8: 'an / an'  // para la 8, la opción correcta tiene texto "an / an"
+    };
+
+    // Al cargar, asignar eventos a opciones
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', function(e) {
+            const questionDiv = this.closest('.question');
+            if (!questionDiv) return;
+            const qId = questionDiv.id.replace('q','');
+            // Deseleccionar hermanos
+            questionDiv.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            // Ocultar feedback anterior
+            const fb = document.getElementById('fb'+qId);
+            if (fb) fb.innerHTML = '';
+        });
+    });
+
+    function checkAnswer(qId) {
+        const questionDiv = document.getElementById('q'+qId);
+        if (!questionDiv) return;
+        const selected = questionDiv.querySelector('.option.selected');
+        const fbDiv = document.getElementById('fb'+qId);
+        if (!selected) {
+            fbDiv.innerHTML = '<span style="color:#b34141;">Selecciona una opción primero.</span>';
+            fbDiv.className = 'feedback fb-bad';
+            return;
+        }
+
+        const isCorrect = selected.dataset.correct === 'true';
+        const allOpts = questionDiv.querySelectorAll('.option');
+        allOpts.forEach(opt => {
+            opt.classList.remove('correct', 'incorrect');
+            if (opt.dataset.correct === 'true') opt.classList.add('correct');
+            if (opt === selected && !isCorrect) opt.classList.add('incorrect');
+        });
+
+        // Sumar puntos si no se había respondido
+        if (!answered[qId]) {
+            if (isCorrect) score += 10;
+            answered[qId] = true;
+            updateScore();
+        }
+
+        // Mostrar explicación detallada
+        let explanation = getExplanation(qId, isCorrect);
+        fbDiv.innerHTML = `<strong>${isCorrect ? '✅ Correcto' : '❌ Incorrecto'}</strong><br>${explanation}`;
+        fbDiv.className = `feedback ${isCorrect ? 'fb-good' : 'fb-bad'}`;
+
+        // Añadir nota comparativa
+        let extra = getExtraNote(qId);
+        fbDiv.innerHTML += `<div class="explanation-detail">${extra}</div>`;
+    }
+
+    function getExplanation(qId, correct) {
+        const texts = {
+            1: correct ? 'El sujeto es "The children" (quienes juegan).' : 'El sujeto es quien realiza la acción: "The children".',
+            2: correct ? 'En inglés necesitas el sujeto "I".' : 'Debes incluir "I": "I cook pasta".',
+            3: correct ? 'Orden correcto: They (sujeto) + eat (verbo) + apples (objeto).' : 'El orden es Sujeto → Verbo → Objeto: They eat apples.',
+            4: correct ? 'Usamos "an" porque "elephant" suena con vocal al inicio.' : 'Antes de sonido vocálico (elephant) va "an".',
+            5: correct ? 'Negativa: She + does + not + speak (verbo base).' : 'La estructura correcta es "She does not speak English".',
+            6: correct ? 'Pregunta: Do + sujeto + verbo base.' : 'La pregunta correcta es "Do they work hard?"',
+            7: correct ? '"Honest" empieza con sonido "o" (vocal) → an.' : 'La "h" no se pronuncia, suena "onest" → an.',
+            8: correct ? 'Ambos, apple y orange, tienen sonido vocálico inicial → an / an.' : 'Apple y orange: ambos con vocal → an para los dos.'
+        };
+        return texts[qId] || (correct ? 'Correcto.' : 'Revisa la respuesta correcta.');
+    }
+
+    function getExtraNote(qId) {
+        const notes = {
+            1: '🇪🇸 En español podríamos decir "Juegan", pero en inglés "play" no indica quién.',
+            2: 'El español tiene desinencias: "cocino" ya dice "yo". En inglés "cook" sirve para varias personas.',
+            3: 'El orden fijo evita ambigüedades: en inglés "Apples they eat" sonaría como "las manzanas, ellas comen" (objeto al inicio, poco natural).',
+            4: 'La regla es fonética: "a" antes de consonante, "an" antes de vocal (sonido).',
+            5: 'El auxiliar "does" lleva la -s, así que "speak" queda sin -s.',
+            6: 'Para preguntas, el auxiliar salta al principio.',
+            7: 'Siempre escucha el sonido, no la letra. "University" suena "yuniversity" → a, aunque empiece con u.',
+            8: 'Ambas palabras empiezan con sonido vocálico, así que se repite "an".'
+        };
+        return notes[qId] || '';
+    }
+
+    function updateScore() {
+        document.getElementById('scoreDisplay').innerText = score;
+    }
+
+    function goToModule(mod) {
+        document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+        document.getElementById('mod'+mod).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showResults() {
+        document.getElementById('finalScore').innerText = score;
+        goToModule(5);
+    }
+
+    function restart() {
+        score = 0;
+        answered = {};
+        updateScore();
+        document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+        document.querySelectorAll('.feedback').forEach(fb => fb.innerHTML = '');
+        goToModule(1);
+    }
+
+    // Exponer funciones globales
+    window.checkAnswer = checkAnswer;
+    window.goToModule = goToModule;
+    window.showResults = showResults;
+    window.restart = restart;
+</script>
+</body>
+</html>
