@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.2, user-scalable=yes">
+  <title>📱Los Pronombres </title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0f3b5e, #18638c);
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      padding: 20px 12px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #e7f3ff;
+    }
+
+    .app-container {
+      max-width: 550px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 48px 48px 32px 32px;
+      padding: 25px 18px;
+      border: 2px solid #60b0f0;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.6);
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 500;
+      color: #fcee9f;
+      text-shadow: 0 4px 0 #9e7720;
+      margin-bottom: 8px;
+      padding-left: 15px;
+    }
+
+    .sub {
+      font-size: 1.1rem;
+      color: #c7e6ff;
+      margin-bottom: 30px;
+      padding-left: 18px;
+      border-left: 5px solid #ffb547;
+    }
+
+    .pronoun-list {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin: 20px 0 35px;
+    }
+
+    .pronoun-card {
+      background: #1f5378;
+      border-radius: 42px;
+      padding: 22px 20px 25px;
+      border: 3px solid #8fc9ff;
+      box-shadow: 0 12px 0 #0e3752, 0 8px 15px black;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pronoun-title {
+      font-size: 3rem;
+      font-weight: 800;
+      color: #fceb9c;
+      text-shadow: 0 5px 0 #a57c28;
+      line-height: 1;
+    }
+
+    .audio-badge {
+      background: #357eb0;
+      border: none;
+      border-radius: 60px;
+      width: 60px;
+      height: 60px;
+      font-size: 2.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 0 #19415a;
+      transition: 0.08s;
+      color: white;
+    }
+
+    .audio-badge:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #19415a;
+    }
+
+    .desc {
+      background: #17466b;
+      border-radius: 24px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: #e2f0ff;
+      border-left: 6px solid #ffb347;
+    }
+
+    .examples-section {
+      background: #1b3f5c;
+      border-radius: 30px;
+      padding: 18px 15px;
+      margin: 18px 0;
+      border: 2px dashed #7cb9e8;
+    }
+
+    .examples-title {
+      font-weight: 600;
+      color: #ffda88;
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .example-item {
+      display: flex;
+      flex-direction: column;
+      background: #2c628b;
+      border-radius: 28px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border: 2px solid #95c8f0;
+    }
+
+    .example-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .example-text {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #fdf6e3;
+      flex: 1;
+    }
+
+    .example-text strong {
+      color: #ffdb7c;
+      font-size: 1.4rem;
+    }
+
+    .example-translation {
+      color: #cfe3ff;
+      font-size: 1rem;
+      margin-top: 8px;
+      padding-left: 10px;
+      border-left: 3px solid #ffb547;
+      font-style: italic;
+    }
+
+    .audio-mini {
+      background: #3f7fb3;
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #1f4763;
+      transition: 0.08s;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .audio-mini:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #1f4763;
+    }
+
+    /* frase larga para escribir */
+    .writing-practice {
+      background: #123b57;
+      border-radius: 32px;
+      padding: 20px;
+      margin: 20px 0 5px;
+      border: 2px solid #f4cda6;
+    }
+
+    .phrase-title {
+      font-size: 1.2rem;
+      color: #ffda88;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .long-phrase {
+      background: #0e3147;
+      padding: 18px 15px;
+      border-radius: 30px;
+      font-size: 1.25rem;
+      color: #fcf0d5;
+      margin-bottom: 10px;
+      border: 2px solid #ffb347;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    .phrase-translation {
+      background: #15455e;
+      border-radius: 20px;
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      color: #ddf2ff;
+      font-style: italic;
+      text-align: center;
+      border-left: 6px solid #7cb9e8;
+    }
+
+    .phrase-audio-btn {
+      background: #3f7fb3;
+      border: none;
+      border-radius: 40px;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #1f4763;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .phrase-audio-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 0 0 #1f4763;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .writing-input {
+      width: 100%;
+      padding: 16px 18px;
+      border: none;
+      border-radius: 60px;
+      background: #ebf7ff;
+      font-size: 1.1rem;
+      text-align: left;
+      border: 3px solid #5fa7d9;
+      outline: none;
+    }
+
+    .writing-input:focus {
+      border-color: #f7c35c;
+    }
+
+    .check-btn {
+      background: #f7b32b;
+      border: none;
+      border-radius: 60px;
+      padding: 16px 20px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #00263b;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #b87e1a;
+      transition: 0.1s;
+    }
+
+    .check-btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #b87e1a;
+    }
+
+    .feedback-message {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 28px;
+      background: #1f4b6e;
+      color: #ddf2ff;
+      font-size: 1rem;
+      border-left: 8px solid;
+    }
+
+    .correct-fb { border-color: #6ec06e; background: #1f5f4c; }
+    .incorrect-fb { border-color: #e67a7a; background: #632f2f; }
+
+    .exit-button {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0 10px;
+    }
+
+    .exit-btn {
+      background: #a54545;
+      border: none;
+      border-radius: 60px;
+      padding: 16px 45px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #632b2b;
+      transition: 0.1s;
+      border: 2px solid #ffa2a2;
+    }
+
+    .exit-btn:active {
+      transform: translateY(7px);
+      box-shadow: 0 1px 0 #632b2b;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #aaccee;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <h1>🗣️ Los pronombres</h1>
+  <div class="sub">escucha, lee la traducción y escribe</div>
+
+  <div id="pronounList" class="pronoun-list"></div>
+
+  <div class="exit-button">
+    <button class="exit-btn" id="exitBtn">✕ terminar</button>
+  </div>
+  <div class="footer-note">Políglotas</div>
+</div>
+
+<script>
+  // Base de datos de pronombres con frases y traducciones
+  const pronouns = [
+    {
+      word: "I",
+      audio: "I",
+      desc: "Primera persona singular. Siempre mayúscula. Significa 'yo'.",
+      examples: [
+        { en: "I am a student.", es: "Yo soy estudiante." },
+        { en: "I like coffee.", es: "Me gusta el café." },
+        { en: "I will call you.", es: "Te llamaré." }
+      ],
+      longPhrase: {
+        en: "I went to the store yesterday, but you weren't there. I'll come back tomorrow.",
+        es: "Fui a la tienda ayer, pero tú no estabas. Regresaré mañana."
+      }
+    },
+    {
+      word: "You",
+      audio: "you",
+      desc: "Segunda persona singular y plural. 'Tú, usted, vosotros, ustedes'.",
+      examples: [
+        { en: "You are my friend.", es: "Eres mi amigo." },
+        { en: "You speak Spanish?", es: "¿Hablas español?" },
+        { en: "You can do it.", es: "Puedes hacerlo." }
+      ],
+      longPhrase: {
+        en: "You always know what to say. You make me laugh, and you are very kind.",
+        es: "Siempre sabes qué decir. Me haces reír y eres muy amable."
+      }
+    },
+    {
+      word: "He",
+      audio: "He",
+      desc: "Tercera persona masculino singular. 'Él'.",
+      examples: [
+        { en: "He plays football.", es: "Él juega fútbol." },
+        { en: "He is tall.", es: "Él es alto." },
+        { en: "He works in a bank.", es: "Él trabaja en un banco." }
+      ],
+      longPhrase: {
+        en: "He said he would come early, but he forgot. I hope he remembers later.",
+        es: "Dijo que vendría temprano, pero lo olvidó. Espero que lo recuerde después."
+      }
+    },
+    {
+      word: "She",
+      audio: "She",
+      desc: "Tercera persona femenino singular. 'Ella'.",
+      examples: [
+        { en: "She reads books.", es: "Ella lee libros." },
+        { en: "She is a doctor.", es: "Ella es doctora." },
+        { en: "She likes music.", es: "A ella le gusta la música." }
+      ],
+      longPhrase: {
+        en: "She called me yesterday. She was very happy because she finished her project.",
+        es: "Ella me llamó ayer. Estaba muy feliz porque terminó su proyecto."
+      }
+    },
+    {
+      word: "It",
+      audio: "It",
+      desc: "Tercera persona neutro singular. Objetos, animales, ideas.",
+      examples: [
+        { en: "It is a cat.", es: "Es un gato." },
+        { en: "It rains a lot.", es: "Llueve mucho." },
+        { en: "It looks nice.", es: "Se ve bonito." }
+      ],
+      longPhrase: {
+        en: "It was a beautiful day. It was sunny and warm, so we went to the beach.",
+        es: "Era un día hermoso. Hacía sol y calor, así que fuimos a la playa."
+      }
+    },
+    {
+      word: "We",
+      audio: "we",
+      desc: "Primera persona plural. 'Nosotros/nosotras'.",
+      examples: [
+        { en: "We are friends.", es: "Somos amigos." },
+        { en: "We live in Mexico.", es: "Vivimos en México." },
+        { en: "We have a car.", es: "Tenemos un coche." }
+      ],
+      longPhrase: {
+        en: "We are planning a trip. We want to visit Paris, but we need to save money.",
+        es: "Estamos planeando un viaje. Queremos visitar París, pero necesitamos ahorrar dinero."
+      }
+    },
+    {
+      word: "They",
+      audio: "They",
+      desc: "Tercera persona plural. 'Ellos/ellas'.",
+      examples: [
+        { en: "They are students.", es: "Ellos son estudiantes." },
+        { en: "They like pizza.", es: "Les gusta la pizza." },
+        { en: "They said it's fine.", es: "Dijeron que está bien." }
+      ],
+      longPhrase: {
+        en: "They arrived late, but they brought food. They said they were sorry.",
+        es: "Llegaron tarde, pero trajeron comida. Dijeron que lo sentían."
+      }
+    },
+    {
+      word: "My",
+      audio: "my",
+      desc: "Adjetivo posesivo: 'mi / mis'.",
+      examples: [
+        { en: "My name is Ana.", es: "Mi nombre es Ana." },
+        { en: "My car is red.", es: "Mi coche es rojo." },
+        { en: "My friends are here.", es: "Mis amigos están aquí." }
+      ],
+      longPhrase: {
+        en: "My brother and my sister live together. My parents visit them often.",
+        es: "Mi hermano y mi hermana viven juntos. Mis padres los visitan a menudo."
+      }
+    },
+    {
+      word: "Your",
+      audio: "your",
+      desc: "Posesivo: 'tu, tus, su (de usted)'.",
+      examples: [
+        { en: "Your book is on the table.", es: "Tu libro está en la mesa." },
+        { en: "Is this your phone?", es: "¿Es este tu teléfono?" },
+        { en: "Your ideas are great.", es: "Tus ideas son geniales." }
+      ],
+      longPhrase: {
+        en: "Your smile is beautiful. Your eyes shine, and your laugh is contagious.",
+        es: "Tu sonrisa es hermosa. Tus ojos brillan y tu risa es contagiosa."
+      }
+    },
+    {
+      word: "His",
+      audio: "his",
+      desc: "Posesivo de 'he': 'su (de él)'.",
+      examples: [
+        { en: "His brother is a doctor.", es: "Su hermano (de él) es doctor." },
+        { en: "I like his style.", es: "Me gusta su estilo." }
+      ],
+      longPhrase: {
+        en: "His car is new. He loves his car, and he washes it every Sunday.",
+        es: "Su coche es nuevo. Él ama su coche y lo lava cada domingo."
+      }
+    },
+    {
+      word: "Her",
+      audio: "her",
+      desc: "Posesivo de 'she': 'su (de ella)'.",
+      examples: [
+        { en: "Her dress is beautiful.", es: "Su vestido (de ella) es hermoso." },
+        { en: "I met her mother.", es: "Conocí a su madre." }
+      ],
+      longPhrase: {
+        en: "Her name is Laura. Her house is near the park, and her garden is full of flowers.",
+        es: "Su nombre es Laura. Su casa está cerca del parque y su jardín está lleno de flores."
+      }
+    },
+    {
+      word: "Our",
+      audio: "our",
+      desc: "Posesivo: 'nuestro/nuestra'.",
+      examples: [
+        { en: "Our house is small.", es: "Nuestra casa es pequeña." },
+        { en: "Our children play here.", es: "Nuestros niños juegan aquí." }
+      ],
+      longPhrase: {
+        en: "Our team won the match! We celebrated all night. Our coach was very proud.",
+        es: "¡Nuestro equipo ganó el partido! Celebramos toda la noche. Nuestro entrenador estaba muy orgulloso."
+      }
+    },
+    {
+      word: "Their",
+      audio: "their",
+      desc: "Posesivo de 'they': 'su (de ellos/ellas)'.",
+      examples: [
+        { en: "Their dog is black.", es: "Su perro (de ellos) es negro." },
+        { en: "I like their music.", es: "Me gusta su música." }
+      ],
+      longPhrase: {
+        en: "Their parents are teachers. Their children study a lot, and their grades are excellent.",
+        es: "Sus padres son maestros. Sus hijos estudian mucho y sus calificaciones son excelentes."
+      }
+    }
+  ];
+
+  // Función para reproducir con síntesis de voz (texto en inglés)
+  function speakText(text) {
+    if (!window.speechSynthesis) {
+      alert('Tu navegador no soporta síntesis de voz.');
+      return;
+    }
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Renderizar todas las tarjetas
+  function renderPronouns() {
+    const container = document.getElementById('pronounList');
+    let html = '';
+
+    pronouns.forEach((p, idx) => {
+      // Ejemplos con traducción
+      let examplesHtml = '';
+      p.examples.forEach(ex => {
+        examplesHtml += `
+          <div class="example-item">
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <span class="example-text"><strong>${p.word}</strong> ${ex.en.substring(p.word.length).trim()}</span>
+              <button class="audio-mini" data-text="${ex.en}" aria-label="escuchar ejemplo">🔊</button>
+            </div>
+            <div class="example-translation">${ex.es}</div>
+          </div>
+        `;
+      });
+
+      html += `
+        <div class="pronoun-card" id="card-${idx}">
+          <div class="card-header">
+            <span class="pronoun-title">${p.word}</span>
+            <button class="audio-badge" data-text="${p.word}" aria-label="reproducir ${p.word}">🔊</button>
+          </div>
+          <div class="desc">${p.desc}</div>
+          <div class="examples-section">
+            <div class="examples-title">📘 frases cotidianas</div>
+            ${examplesHtml}
+          </div>
+          <div class="writing-practice">
+            <div class="phrase-title">
+              <span>📝 frase para escribir</span>
+              <button class="phrase-audio-btn" data-text="${p.longPhrase.en}">🔊 escuchar inglés</button>
+            </div>
+            <div class="long-phrase">${p.longPhrase.en}</div>
+            <div class="phrase-translation">${p.longPhrase.es}</div>
+            <div class="input-group">
+              <input type="text" class="writing-input" id="input-${idx}" placeholder="Escribe la frase en inglés..." autocomplete="off">
+              <button class="check-btn" data-idx="${idx}" data-correct="${p.longPhrase.en}">comprobar</button>
+            </div>
+            <div class="feedback-message" id="fb-${idx}"></div>
+          </div>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+
+    // Asignar eventos a todos los botones de audio
+    document.querySelectorAll('.audio-badge, .audio-mini, .phrase-audio-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const text = this.dataset.text;
+        if (text) speakText(text);
+      });
+    });
+
+    // Asignar eventos a los botones de comprobación
+    document.querySelectorAll('.check-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const idx = this.dataset.idx;
+        const correctPhrase = this.dataset.correct;
+        const input = document.getElementById('input-'+idx);
+        const userText = input.value.trim();
+        const fbDiv = document.getElementById('fb-'+idx);
+
+        if (!userText) {
+          fbDiv.innerHTML = '✏️ Escribe la frase para practicar.';
+          fbDiv.className = 'feedback-message incorrect-fb';
+          return;
+        }
+
+        // Comparación: ignorar espacios múltiples y mayúsculas
+        const normalize = (s) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+        const isCorrect = normalize(userText) === normalize(correctPhrase);
+
+        if (isCorrect) {
+          fbDiv.innerHTML = '✅ ¡Perfecto! Has escrito la frase correctamente.';
+          fbDiv.className = 'feedback-message correct-fb';
+        } else {
+          fbDiv.innerHTML = `❌ No coincide. Sigue practicando. La frase correcta es: "${correctPhrase}"`;
+          fbDiv.className = 'feedback-message incorrect-fb';
+        }
+      });
+    });
+  }
+
+  // Botón de salir
+  function setupExit() {
+    document.getElementById('exitBtn').addEventListener('click', function() {
+      if (confirm('¿Finalizar la práctica? Volverás al inicio.')) {
+        document.body.innerHTML = `
+          <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #1a3b55; color: white; font-size: 2rem; text-align: center; padding: 20px;">
+            🌟 Sesión terminada. ¡Sigue practicando!
+          </div>
+        `;
+      }
+    });
+  }
+
+  window.onload = function() {
+    renderPronouns();
+    setupExit();
+  };
+</script>
+</body>
+</html>
