@@ -2,15 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>Cursos de Idiomas</title>
     <style>
-        /* Estilos Generales (consistentes con las páginas anteriores) */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Times New Roman', Times, serif;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
         }
 
         body {
@@ -21,7 +20,6 @@
             flex-direction: column;
         }
 
-        /* Header */
         header {
             background: #000033;
             padding: 1rem 2rem;
@@ -57,14 +55,13 @@
             text-decoration: none;
             font-weight: 500;
             transition: opacity 0.3s;
-            font-weight: bold
+            font-weight: bold;
         }
 
         .menu a:hover {
             opacity: 0.8;
         }
 
-        /* Contenido Principal */
         .container {
             flex: 1;
             padding: 120px 2rem 2rem;
@@ -78,7 +75,16 @@
             margin-bottom: 3rem;
         }
 
-        /* Círculos de Cursos */
+        .main-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .main-title p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
         .courses-grid {
             display: flex;
             justify-content: center;
@@ -106,24 +112,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 4rem;
+            text-decoration: none;
+            color: white;
         }
 
         .course-circle:hover {
             transform: scale(1.1);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             background: rgba(255, 255, 255, 0.15);
-        }
-
-        .course-circle img {
-            width: 80%;
-            height: 80%;
-            object-fit: cover;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-        }
-
-        .course-circle:hover img {
-            transform: scale(1.05);
         }
 
         .course-name {
@@ -134,7 +131,6 @@
             letter-spacing: 1px;
         }
 
-        /* Footer */
         footer {
             background: #000033;
             text-align: center;
@@ -142,19 +138,17 @@
             margin-top: auto;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .container {
                 padding: 100px 1rem 1rem;
             }
-
             .courses-grid {
                 gap: 2rem;
             }
-
             .course-circle {
                 width: 150px;
                 height: 150px;
+                font-size: 5rem;
             }
         }
 
@@ -162,18 +156,19 @@
             header {
                 padding: 1rem;
             }
-
             .menu {
                 gap: 1rem;
             }
-
             .course-circle {
                 width: 130px;
                 height: 130px;
+                font-size: 4rem;
             }
-
             .course-name {
                 font-size: 1rem;
+            }
+            .main-title h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -181,11 +176,10 @@
 <body>
     <header>
         <a href="index.html" class="logo">
-            <img src="https://polyglots-at.github.io/at/polyglots.jpg" alt="Logo">
+            <img src="https://polyglots-at.github.io/ex/logopolyglots.jpg" alt="Logo">
         </a>
         <nav class="menu">
-            <a href="index.html"></a>
-           
+            <!-- Menú vacío como solicitaste -->
         </nav>
     </header>
 
@@ -198,8 +192,8 @@
         <div class="courses-grid">
             <!-- Curso de Italiano -->
             <div class="course-item">
-                <a href="" class="course-circle">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/1200px-Flag_of_Italy.svg.png" alt="Italiano">
+                <a href="#" class="course-circle">
+                    🇮🇹
                 </a>
                 <span class="course-name">Italiano</span>
             </div>
@@ -207,15 +201,15 @@
             <!-- Curso de Inglés -->
             <div class="course-item">
                 <a href="https://polyglots-at.github.io/contenido/cursopropedeuticoingles.html" class="course-circle">
-                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/1200px-Flag_of_the_United_Kingdom.svg.png" alt="Inglés">
+                    🇬🇧
                 </a>
                 <span class="course-name">Inglés</span>
             </div>
 
             <!-- Curso de Portugués -->
             <div class="course-item">
-                <a href="" class="course-circle">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/1200px-Flag_of_Portugal.svg.png" alt="Portugués">
+                <a href="#" class="course-circle">
+                    🇵🇹
                 </a>
                 <span class="course-name">Portugués</span>
             </div>
@@ -227,4 +221,3 @@
     </footer>
 </body>
 </html>
-
