@@ -131,7 +131,7 @@
         /* ===== PILARES ===== */
         .pillars {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 16px;
             margin: 30px 0 20px;
         }
@@ -143,6 +143,11 @@
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.04);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 180px;
         }
 
         .pillar:hover {
@@ -249,6 +254,12 @@
         }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .pillars {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             header {
                 padding: 10px 16px;
@@ -277,8 +288,13 @@
             }
 
             .pillars {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                grid-template-columns: repeat(2, 1fr);
                 gap: 12px;
+            }
+
+            .pillar {
+                min-height: 160px;
+                padding: 20px 14px;
             }
 
             .pillar .icon {
@@ -318,11 +334,13 @@
             }
 
             .pillars {
-                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
             }
 
             .pillar {
-                padding: 16px 12px;
+                min-height: 140px;
+                padding: 14px 10px;
             }
 
             .pillar .icon {
@@ -367,7 +385,7 @@
         <!-- ===== TÍTULO ===== -->
         <div class="main-title">
             <h1>🌟 Polyglots</h1>
-            <div class="subtitle">Aprende idiomas de forma natural, divertida y efectiva</div>
+            <div class="subtitle">Aprende idiomas de forma natural y efectiva</div>
             <div class="tagline">Conecta con personas de todo el mundo y domina nuevos idiomas</div>
         </div>
 
