@@ -1,249 +1,436 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proyecto Políglotas</title>
-  <style>
-    /* Estilos generales */
-    body {
-      margin: 0;
-      font-family: 'Times New Roman', Times, serif;
-      background-color: #2563eb;
-      color: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>Polyglots · Aprende idiomas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== RESET Y BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Header fijo */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #000033;
-      padding: 10px 20px;
-      width: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-    }
+        body {
+            background: linear-gradient(135deg, #0f1724, #1a2a4a);
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            color: #f0f7ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
 
-    /* Logo */
-    .logo {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      overflow: hidden;
-    }
+        /* ===== HEADER ===== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
+            border-radius: 60px;
+            padding: 10px 24px;
+            width: 100%;
+            max-width: 1000px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
 
-    .logo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
 
-    /* Menú */
-    .menu {
-      display: flex;
-      gap: 20px;
-      margin-right: 30px;
-    }
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-    .menu a {
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-    }
+        .menu {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
 
-    .menu a:hover {
-      text-decoration: underline;
-    }
+        .menu a {
+            color: #b3e5fc;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            padding: 8px 20px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    /* Contenedor principal */
-    .container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 100px 20px 40px;
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-    }
+        .menu a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(79, 195, 247, 0.2);
+            transform: translateY(-2px);
+        }
 
-    /* Contenido principal */
-    .main-content {
-      margin-bottom: 40px;
-    }
+        .menu a i {
+            font-size: 0.9rem;
+        }
 
-    .main-content h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
-    }
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 48px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
 
-    /* Botones circulares mejorados */
-    .options {
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-      flex-wrap: wrap;
-      margin: 30px 0;
-    }
+        /* ===== TÍTULO PRINCIPAL ===== */
+        .main-title {
+            margin-bottom: 36px;
+        }
 
-    .option-button {
-      width: 110px;
-      height: 110px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      cursor: pointer;
-      transition: all 0.3s ease;
-      overflow: hidden;
-      padding: 5px;
-      position: relative;
-    }
+        .main-title h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4fc3f7, #81c784);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
 
-    .option-button:hover {
-      transform: scale(1.1);
-      background: rgba(255, 255, 255, 0.25);
-    }
+        .main-title .subtitle {
+            font-size: 1.2rem;
+            color: #90a4ae;
+            margin-top: 8px;
+            -webkit-text-fill-color: #90a4ae;
+        }
 
-    .option-button img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-      transition: transform 0.3s ease;
-    }
+        .main-title .tagline {
+            font-size: 0.95rem;
+            color: #546e7a;
+            margin-top: 4px;
+            -webkit-text-fill-color: #546e7a;
+        }
 
-    .option-button:hover img {
-      transform: scale(1.05);
-    }
+        /* ===== PILARES ===== */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 30px 0 20px;
+        }
 
-    /* Texto descriptivo */
-    .option-text {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(0, 0, 51, 0.8);
-      color: white;
-      padding: 8px;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      border-radius: 0 0 50% 50%;
-    }
+        .pillar {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 24px 18px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.3s ease;
+        }
 
-    /* Footer */
-    footer {
-      background-color: #000033;
-      color: white;
-      text-align: center;
-      padding: 20px 0;
-      width: 100%;
-    }
+        .pillar:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(79, 195, 247, 0.15);
+            transform: translateY(-4px);
+        }
 
-    .creditos {
-      font-size: 14px;
-    }
+        .pillar .icon {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 10px;
+        }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      header {
-        padding: 10px 15px;
-      }
+        .pillar .name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #b3e5fc;
+            margin-bottom: 4px;
+        }
 
-      .menu {
-        gap: 15px;
-        margin-right: 0;
-      }
+        .pillar .desc {
+            font-size: 0.85rem;
+            color: #90a4ae;
+            line-height: 1.5;
+        }
 
-      .container {
-        padding: 80px 15px 30px;
-      }
+        /* ===== SECCIÓN DEL MÉTODO ===== */
+        .method-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            padding: 32px 28px;
+            margin: 20px 0 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
 
-      .main-content h1 {
-        font-size: 28px;
-      }
+        .method-section h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #b3e5fc;
+            margin-bottom: 12px;
+        }
 
-      .option-button {
-        width: 100px;
-        height: 100px;
-      }
+        .method-section .method-text {
+            font-size: 1rem;
+            color: #c8d6e5;
+            line-height: 1.8;
+            max-width: 750px;
+            margin: 0 auto 16px;
+        }
 
-      .option-text {
-        font-size: 11px;
-        padding: 6px;
-      }
-    }
+        .method-section .method-text strong {
+            color: #4fc3f7;
+        }
 
-    @media (max-width: 480px) {
-      .menu a {
-        font-size: 16px;
-      }
+        .method-section .btn-register {
+            display: inline-block;
+            background: linear-gradient(135deg, #1a3a6a, #2a5a9a);
+            color: #fff;
+            padding: 14px 40px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(79, 195, 247, 0.15);
+            margin-top: 8px;
+        }
 
-      .option-button {
-        width: 85px;
-        height: 85px;
-      }
+        .method-section .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(79, 195, 247, 0.15);
+            background: linear-gradient(135deg, #1a4a7a, #2a6aaa);
+        }
 
-      .option-text {
-        font-size: 10px;
-        padding: 4px;
-      }
-    }
-  </style>
+        .method-section .btn-register i {
+            margin-right: 10px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 20px 16px 10px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 1000px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        footer .creditos {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            line-height: 1.8;
+        }
+
+        footer .creditos a {
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        footer .creditos a:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                padding: 10px 16px;
+                border-radius: 40px;
+            }
+
+            .menu {
+                gap: 10px;
+            }
+
+            .menu a {
+                font-size: 0.8rem;
+                padding: 6px 14px;
+            }
+
+            .container {
+                padding: 28px 18px;
+            }
+
+            .main-title h1 {
+                font-size: 2rem;
+            }
+
+            .main-title .subtitle {
+                font-size: 1rem;
+            }
+
+            .pillars {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 12px;
+            }
+
+            .pillar .icon {
+                font-size: 2.2rem;
+            }
+
+            .method-section {
+                padding: 24px 18px;
+            }
+
+            .method-section h2 {
+                font-size: 1.3rem;
+            }
+
+            .method-section .btn-register {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu a {
+                font-size: 0.7rem;
+                padding: 4px 12px;
+            }
+
+            .menu a i {
+                font-size: 0.8rem;
+            }
+
+            .main-title h1 {
+                font-size: 1.6rem;
+            }
+
+            .main-title .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .pillars {
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            }
+
+            .pillar {
+                padding: 16px 12px;
+            }
+
+            .pillar .icon {
+                font-size: 1.8rem;
+            }
+
+            .pillar .name {
+                font-size: 0.85rem;
+            }
+
+            .pillar .desc {
+                font-size: 0.75rem;
+            }
+
+            .method-section .method-text {
+                font-size: 0.9rem;
+            }
+
+            .method-section .btn-register {
+                padding: 10px 24px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo">
-      <img src= "https://polyglots-at.github.io/ex/logopolyglots.jpg" alt="Logo Políglotas">
-    </a>
-    <nav class="menu">
-      <a href="registro.html">Registrarse</a>
-      <a href="login.html">Iniciar Sesión</a>
-    </nav>
-  </header>
 
-  <div class="container">
-    <div class="main-content">
-      <h1>Bienvenido al Proyecto Políglotas</h1>
-      <p>Conecta con personas de todo el mundo y aprende idiomas de manera fácil y divertida.</p>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <a href="index.html" class="logo">
+            <img src="https://polyglots-at.github.io/ex/logopolyglots.jpg" alt="Logo Polyglots">
+        </a>
+        <nav class="menu">
+            <a href="https://polyglots-at.github.io/registro.html"><i class="fas fa-user-plus"></i> Registrarse</a>
+            <a href="https://polyglots-at.github.io/login.html"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+        </nav>
+    </header>
+
+    <!-- ===== CONTENEDOR PRINCIPAL ===== -->
+    <div class="container">
+
+        <!-- ===== TÍTULO ===== -->
+        <div class="main-title">
+            <h1>🌟 Polyglots</h1>
+            <div class="subtitle">Aprende idiomas de forma natural, divertida y efectiva</div>
+            <div class="tagline">Conecta con personas de todo el mundo y domina nuevos idiomas</div>
+        </div>
+
+        <!-- ===== PILARES (ICONOS CON DESCRIPCIÓN) ===== -->
+        <div class="pillars">
+            <div class="pillar">
+                <span class="icon">📝</span>
+                <div class="name">Traducciones</div>
+                <div class="desc">Aprende el significado y uso de palabras y frases en contexto real, con ejemplos prácticos.</div>
+            </div>
+            <div class="pillar">
+                <span class="icon">🔊</span>
+                <div class="name">Pronunciación</div>
+                <div class="desc">Perfecciona tu acento con ejercicios de escucha y repetición. Habla como un nativo.</div>
+            </div>
+            <div class="pillar">
+                <span class="icon">🎤</span>
+                <div class="name">Fonética</div>
+                <div class="desc">Domina los sonidos del idioma con práctica auditiva y visual. Mejora tu oído y tu habla.</div>
+            </div>
+            <div class="pillar">
+                <span class="icon">📚</span>
+                <div class="name">Gramática</div>
+                <div class="desc">Construye oraciones correctas con reglas claras y ejercicios interactivos. Aprende la estructura del idioma.</div>
+            </div>
+            <div class="pillar">
+                <span class="icon">✍️</span>
+                <div class="name">Práctica</div>
+                <div class="desc">Ejercicios prácticos para aplicar lo aprendido. Escribe, escucha y habla con confianza.</div>
+            </div>
+            <div class="pillar">
+                <span class="icon">🌍</span>
+                <div class="name">Más Idiomas</div>
+                <div class="desc">Inglés, francés, italiano, portugués y más. Aprende el idioma que siempre has querido dominar.</div>
+            </div>
+        </div>
+
+        <!-- ===== SECCIÓN DEL MÉTODO ===== -->
+        <div class="method-section">
+            <h2>🌍 Nuestro Método Diversificado</h2>
+            <div class="method-text">
+                Polyglots combina <strong>traducciones, pronunciación, fonética, gramática y práctica</strong>
+                en un solo lugar. Nuestro enfoque integral te permite desarrollar todas las habilidades
+                lingüísticas de manera <strong>simultánea y natural</strong>. Aprende a tu ritmo, con
+                contenido diseñado para que <strong>hables con confianza</strong> desde el primer día.
+                <br><br>
+                🚀 <strong>¡Disponible para inglés, francés, italiano, portugués y muchos más!</strong>
+            </div>
+            <a href="https://polyglots-at.github.io/registro.html" class="btn-register">
+                <i class="fas fa-rocket"></i> Comienza tu viaje ahora
+            </a>
+        </div>
+
     </div>
 
-    <div class="options">
-      <a href="https://polyglots-at.github.io/ex/descargas" class="option-button">
-        <img src=
-          "data:image/png;base64,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"
-          alt="Libros">
-      
-      </a>
-      <a href="https://polyglots-at.github.io/plandeestudiocursobasicoing.html.html" class="option-button">
-        <img src=
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv3cT1Z-9Mv02TSuQsejLk6EE8Y-z3Ojjcrw&s"
-          alt="Artículos">
-        
-      </a>
-      <a href="login.html" class="option-button">
-        <img src=
-          "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBAQEBAQEBAQEhAVERARERISEBUVFhEWFxURFxUYHigiGRolHRUVITEhJSkrLi4uGB8zODMtNyguMCsBCgoKDg0OGxAQGy0mICUrLi8tNi0tMC0uLS0vLzUtLS8tLy0tLS0tLS0tLS0tLSstLS0tKy0tLi0tLS8tLi0uLf/AABEIAOEA4QMBEQACEQEDEQH/xAAcAAEAAgMBAQEAAAAAAAAAAAAABgcDBAUBAgj/xABHEAABAwEDBgkICAUDBQAAAAABAAIDBAURIQYSMUFRYQcTIjNScXKRshYyU3OBkqHRFCM0QmKxwdIVJEOCoiXw8URjg7PD/8QAGwEBAAEFAQAAAAAAAAAAAAAAAAQBAgMFBgf/xAA8EQEAAQICBQgIBgIBBQAAAAAAAQIDBBEFEiExURMyQWFxkbHRIjRTcoGhweEGFBUWM/AjYvEkQlKiwv/aAAwDAQACEQMRAD8AvFAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQfE0zWDOe5rGjW4ho7yg48+V1nMwdW0xI0hsjXnquberdaOKTRgsRXzbdXdLVdl7ZY/6tvsjlPxDU16eLLGjMX7Oe5kjy3sx2isiHazm+IBNeOKk6Oxcb7dXdLqUNr00/M1EEvq5WPPcCqxMSi12q6JyriY7YybqqsEBAQEBAQEBAQEBAQEBAQEBAQEBAQQ/KDhDo6YlkZNVKMM2IjiwdjpNHdeRsVlVyIbTCaIxGI9LLKnjP0jp8EBtbhBtCckNkbTM6MI5V2+R15v6rlhm7Muhw+gsNb2151T17I7o80XqZnyuzpXvld0pHOe7vcSVjmZne21uzbtRlRTEdkZPhUZBAQeOaDpAPWqk7Yyl1rNykraa7iaqZoH3HO4yPqzH3gey5XRXVCBe0XhbvOoiOzZ4bE2sThTODa2HD00H5mNx/I+xZabvFo8T+Hq6dtirPqnf37vBYVl2rBVM4ynlZKzWWnEHY4aWncVliYnc5+7artVatcTE9bcVWMQEBAQEBAQEBAQEBAQEBAQc23bbgoojLO/Nboa0Yve7otbrPwGk3BUmYjezYfD3L9epbjOVPZU5a1NcXMBMFMcOJYcXD/uO+91aOvSo9VyZ3OwwOhrWHyqr9Kr5R2ec/JGVjbkVAQEBAQEBAQbNnV81PIJYJHRSD7zTpGxwODhuIIV0VTG5gxGGtYinVuRn4x2T0LXyO4QI6otgqs2GoODXDCGU6gL/Nd+E6dR1KRRciXH6Q0Rcw3p0elR847fPwTlZGnEBAQEBAQEBAQEBAQEBBxMqspYbPh4yTlSPvEUINznuH5NGF7tW8kA21VRTGaVg8HcxVzUo+M8FH21a89ZKZp35zzgAMGMbqYwah8TrvUWqqap2u7wmDtYWjUtx2z0y0ValCBcgXICBcgIFyAgII7NlBJHM5skVzAcBoeBtv0Hb+qzxaiY2OYuabvWcRVTco9HPd05fV2qOrjmbnMIcNYOkbiFimmaZ2t9hsXaxNGtbnP+9K0MgcvC0spK15LTc2KoccRsZITpGx3ftWa3cz2S53S2iNTO9YjZ0xw646uro7N1orM5sQEBAQEBAQEBAQEBBzrftiKigfUSnktwa0ec9x81jd5+GJOAVJnKM2axYrv3It0b5ULbVrS1k76iY3vdgGjzWNGiNu4fEknWolVU1S77BYOjC2tSn4zxn+7mirUty7btYQABtxkcMAdAHSKyUUazUaU0nGEjVp21z8utE6ivmkN7pHndeQO4YKRFMRuchdxd+7Oddcz8WHjndJ3eVdkw8pXxk453Sd3lUyOUr4ycc7pO7ymRylfGTjXdJ3eUyOUr4y8413Sd3lMjlK+MtmgikmkbG1zsdJvOA1lUqmIjNIwtq7iLsW6Znb8o4p3DEGNDW6Gi4bVEmc9r0CzaptURRTuhzbXa+ZhbTyDOjdy2g3OvGgX6sf94LJRlTO1qtIxcxVuacNXGdM7Yjfs63Kjr2Sjiaxua4YNluuc0/i2fksmrMbaWooxtvERyGOjKY3Vbpjt/vawuo56SRro+W1xAa5vmuvODSNV/8Awq61NcbWGrC4rAXqa7e2J3TG6eqf72JeMRiLiRiNI3jeoztaZmaYzjKVp8GWVxfm0NQ694H8vI44uaBzTj0gBgdYG0YyLdeeyXH6Z0ZyNXLW49Gd/VPlP96FjrK0IgICAgICAgICAgIKN4QMozW1Jaw/y0Bc2K44POh83t0DcN5Ua5VnOTtdC4HkLXKVR6VXyj775RhYm6EEDtuYvqJSdTi0dTcP0UyiMqYefaSuzcxVczxy7tjpZPWM2RvGyi9t9zW6AbtJO6/D2LHcuZbIbPQ+iqL9PLXd3RHFIP4bB6GL3GrDr1cXRfp+F9nT3Qfw2D0MXuN+Sa08Vf0/C+zp7oP4bB6GL3G/JNaeJ+n4X2dPdB/DYPQxe435Jr1cT9Pwvs6e6D+Gwehi9xvyTWnifp+F9nT3QyQUsbCSxjGE4EtaB+STVM72S1hrNqc7dER2Q0LftPiWZrT9Y8cn8I1u+Svt0Zy12l9IflrepRz5+UcfJGLIbKZm8U4tdiS7UG6y7aFnryy2uVwEXqr8clOU8eEdOfU7c01LWOLCcyQYMkuAzrvzG4rFEVUbW9uXcFpGqbc+jXG6eP8AeHc3bCoZYWvbI/ObfyGjEAdLdfsVldUTuTtFYO/hoqpu1Zxnsj6/Z1Fjbd9RvLSHNJa5pDmuBuIcDeHA7QQCqxOS25RTcpmiqM4lfGRWUAr6VshuEzORO0YAPAHKA6LgQR13alLpq1ozee47CThb0253dHXDvq5EEBAQEBAQEBAQRPhLts0tE5jDdLUkxMu0hpH1jx1Nwv1FwVldWUNjorCfmcRFM7o2z/etSQUR3wgIK/tPn5vWSeIqbTuh5zjPWLnvT4pjYP2aLsnxFRbnOl2uifU6Oz6t9WNiICAgIMFbVNiY6R2gatZOoBXU05zkj4rE0Ya1Nyvo+aCVVQ+aQvdeXOOAHwaApcREQ8/v3rmIuzXVtmf7lDfrHCnj4hvOvAM7hqGqIfqrI9Kc07ETGEtfl6efVz54f6+bywbM45+c4fVsIzt51N+aXK9WDRWj/wA1czq5sb+vq800UV3QgIJPwdW19ErmBxuiqc2KTYCT9U/2ON3U9yy2qspyaXTmE5XD8pG+nb8OnzXkpLihAQEBAQEBAQEFKcKNp8dXujB5FMxsY2ZzgHyH4tH9ijXZznJ2WgMPqYebk76p+UffNEVib0QEFf2pz83rJPEVMp3Q85xnrFz3p8UxsH7NF2T4io1znS7XRPqdHZ9Zb6sbEQEBAJVSZiIzlCrdtPj33N5tl4bvOtyk0UasOF0rj5xV3Knmxu6+t7RNFPH9IcPrHXiBp+MpGwakn0p1TDUxhbX5mrnTzI/+vh0NKkp3zyBoxc4kuccetxV8zFMIdixcxV6KKd87/rMp3R0zYmNY3Q0e0nWTvUSZznN3+Gw9GHtxbo3R8+tmVrOICDwj2bxpVVJiJjKdz9CZKWn9Loqec4ufGA/1jeTJ/k0qZTOcZvOMVZmzeqtz0T/w6yqwCAgICAgICDxzgAScABeSg/NlZVGaSSY33zSPkN+nluLrviodU5zm9IwtrkrNFHCIYlaziAgr+1Ofm9ZJ4iplO6HnOM9Yue9PimNg/ZouyfEVGuc6Xa6J9To7PrLfVjYiAgII7lPadw4hhxPOEah0Pms9qjplzOnNIZR+Xtz73l5uNZdI15dJJhDHi87djBvKy1Tlsje0mCw1NyZuXNlFO2evqjrlirqp00mcRsDGjUNTQlMZQxYnEVYi7rT2RHCOiIS2wrM4hl55x9xdu2NUe5XrS7HRWj/ytvOrnzv6upsWpXNgjLzidDW7T8lSmnWnJIx+Mpwtqa539EcZbEDr2NJ0lrSfaFbO9Js1TVbpqnfMQ+1RkEBBbPA5WZ1NUQn+lMHDc2Rgw95rz7VJtT6LjNP2tXExV/5RHy2LAWVoxAQEBAQEBBy8qpzHQ1jxpbTTlvXxbrvjcqVTlDNh6Ne7TTxmI+b89AKE9KEUEBBX9qc/N6yTxFTKd0POcZ6xc96fFMbB+zRdk+IqNc50u10T6nR2fWW+rGxEBBoWzaIgjvwz3YMG/pdQWSijWlrdJ4+MJazjnTu8/ghlNA+eQNGLnm8k95cVJmYiHE2bVzE3dWNszP8AzMtq1KltzYIj9VHr6b9bz+itpjplKxt+jKLFnmU/+09M+Tp5MWXonePVg+P5Ky7X0Q2mg9HZz+YuR7vn5JKsDqZnKM0Dte0DPIXaGjBjdg29ZUuinVh5/pDG1Yu7rzu6I6k3pfMZ2G+EKJO93mH/AIqOyPBlVGUQEFgcDc11TVM6cLHe5IR/9Fns9LmfxHT6Nurt+i2VncsICAgICAgIODl0f9NrfUvVtW6UvAes2/ejxUIob0QQEBBX9qc/N6yTxFTKd0POcZ6xc96fFMbB+zRdk+IqNc50u10T6nR2fWW+rGxEHhN2lVUmYiM5Q626epdIXyRuu0NzeU0N1C8KTRNOWUOI0nZxdy7Ny5ROXRltiI+BN/KxcWOflA4w62MOhnWdf/CR6U59Bc/6KzyUfyVR6X+scO2elhsOzTPJjzbcXnbsaN5Va6tWGLRmAnFXcp5sb/L4pu1oAAAuAwAGgDYorvKaYpjKNwUhSvmz2K2U15ksWl5tnYb4QoU73pWH/io7I8GVUZRAQTXgid/qDxtpZfhND81ms73P/iKP8FE/7fRcikOQEBAQEBAQEHFy0ZnWdXDZTTn3WF36K2rdKTg6tXEW5/2jxUAob0YQEBBX9qc/N6yTxFTKd0POcZ6xc96fFMbB+zRdk+IqNc50u10T6nR2fWW+rGxEHMyjlzad+12a0e04/AFZLcZ1NVpq5qYSrryhFKK05oiM15zRdyCb2ndcdCkVURO9yOGx9/DzGpVOXDodK0qAzujmgF4nwcOi7XfuwPcrKatWMp6GxxuDnFV0X8PGcV7+qenNJKCkbCwMbq0nWTrJWCqrWnN1OEwtGGtRbp+PXLYVqS8KrC2vmz2K2U15ksWl8xnYb4QoU73pWH/io7I8GVUZRAQTvgejvrJ3dGnIv7UrP2rPZ6XOfiOr/Hbp65W8s7kxAQEBAQEBBhrIBJHJGdEjHNPU5pB/NFYnKc35szS3kuFzm4OGwjAjvUKdkvTKK4rpiuOmInvFRcICCv7U5+b1kniKmU7oec4z1i570+KY2D9mi7J8RUa5zpdron1Ojs+st9WNiII9lfJyYoxpc4nuFw8RWez0y5r8RXPRt246Zmfp9WjZ2T0klzpPq27Pvn2avb3K6q7EbkHBaDvXvSu+jHz7uj4pRRUjIW5kYuGk43knaVgqqmd7q8NhbWGo1LcbGdWpAg8KrC2vmz2K2U15ksWl8xnYb4QoU73pWH/io7I8GVUZRAQWdwMUvJrJtroox/a1znf+xqkWY2OS/EVzO7RRwjPvn7LLWZzogICAgICAgIKEy6s76PaFSy65r38azsy8o/5Z49ii3Iyqd3oa/wArhKeNOzu3fLJwVjbQQEFf2pz83rJPEVMp3Q85xnrFz3p8UxsH7NF2T4io1znS7XRPqdHZ9ZduzLNkqDIGGNoiYZJHSyNiY1ocAXFzsBi4KkU5pOJxVvD0xVcz2zlsjNtVGTlRGx75jBCGPewiWeJj3OY0OLWAnlm4gi6++8KupKN+q4aZiImZzjPZEz38OsqMkKhrg9zIi5rZA4iVjjEY4+NfE+48h+ZjdrVdSqNjD+oYGuvlOmNkTMdGe+OrNkdkvUgxtdxDTI9sdzqiIFkrmZ7IZMeS9zcQ3WmpLLGlsNOeUzOXVO2OMPmpycmjY975aRrI3vjJNVCAZGNDnxtvPKcL7iBjfgqakqU6Ww9UxEa23/WWK1rCnpRfKI7s/i3GOVkmbJmZ4jeGm9ri3G46lSaZjezYbSFjEVatuZz64y7nMVqa8KrC2vmz2K2U15ksWl8xnYb4QoU73pWH/io7I8GVUZRAQXlwb2fxFnQXi5018zv/ACG9v+GYPYplEZUvP9J3+WxVdUbs8o+GxJ1cgCAgICAgICAgrrhfsfPiirGjGE8XL2HnkuPU7D+8rFdpzjNvtAYrk702p3Vbu2PPyVWozsRAQV/anPzesk8RUyndDznGesXPenxTGwfs0XZPiKjXOdLtdE+p2+z6ylmS88TGWgZm8Yz6E++PjOKL/ro+SH3G4+wpRllOfBh0vTVVTainfrx8EpynLnxymKKkqA2ole90rmh0MZpKctMY41t7gML+VeWaNSzVbYaDBzFF30q5p2ZbI3znu3bntcIWy1MoqM76V/EJGRCaJ0LmGieG1DWtxBxazlY334JszzzWa1U26bc0bactuU5x6W6ehzbTDONop5XU7qmSvo/rYJSWTwiNt9Q6IuOYWkNaTc3ScFbPRM8WwsVZa9qiJ1dSrZMbaZ4Z9Ob6rg99JVcTDSVBFo2m5xne2+NhOEkY4xt57+pUyzpnZ0yx2qqaL1uaq5o/x07Yj5bpeZd1MMjKkRXNLLQgMh4wSccTRENe3RmBuIIF/XqVa8spy/uxfommum9bmrdNNWXVt6UJWB1TwqsLa+bPYrZTXmSxaXm2dhvhChTvelYf+KjsjwZVRlEHRydsk1lVDTi+6R3LI1Rtxeb9WAIG8hX0U5yhaRxP5fD1V9O6O2f7m/QzGgAAC4AAADQANAUt56+kBAQEBAQEBAQYK6kZNFJDIM6OVrmPG0OFxRdTVNNUVU74fnu3LKko6iWnk0xnkuuuD2HFkg6x3G8alDqp1ZyehYHF04qzFyN/T1T0tFWpYgr+1Ofm9ZJ4iplO6HnOM9Yue9PimNg/ZouyfEVGuc6Xa6J9Tt9n1lvEKxsXmYNg7gqj3NGwdyoGaNgx0oPMwbB3IZPQ0bAg9QeFVhbXzZ7FbKa8yWLTeYzst8IUKd70rD/xUdkeDKqMogtzgpyf4mE1kjbpKhoEYOlsN94P95ud1Bik2qcozcVpvG8ve5Onm0/Oeny/5T1ZWlEBAQEBAQEBAQEES4Qslvp0IkiA+lQAmPVxjdLoSfiL9B2AlWV060NnovHzhLu3mzv8/gpMgi8EEEEggi4gjSCDoKiu7pqiqIqjdIqKq/tPn5vWSeIqbTuh5zjPWLnvT4pfk88Gmju1BwPWHFRrnOdnoeuKsHRl0Zx83RWNsxAQEBAQEHxK8Na5xwABJO4BVjex3qopt1VTuiJVwprzRYtN5jOw3whQp3vSsP8AxUdkeDKqMqU5BZLGunz5B/KwuHGnU92kQj4E7usLLboz2tLpjSP5ejkqJ9OflHnw713tFwuGAGoaFJcU9QEBAQEBAQEBAQEBBXnCJkSZs6spG3zaZoWjnAP6jR09o+916cVyjPbDe6J0ryE8ld5nR1fZVKjuyiYmM4QrKSkMc7nXcmTlA7/vDv8AzUm3OdLhdM4abOJmeirbH1YrKtV9OTdymnzmHR1jYVWqiKmHA6Ru4Sr0dsTvh2RlUz0TveCxcjPFvI/EdHs57/s98qWeif3hORnir+47fs57zypZ6J/eE5GeJ+47fs57zypZ6J/eE5GeJ+47fs57zypZ6J/eE5GeJ+47fs57zypj9E/vCcjPE/cdv2c955Ux+if3hORnifuO37Oe9zbVt18zcxrcxh0i+9x6zs3LJRbina1eP0xcxNOpEatPzlzqKmdK9rG6XHTsGs+wK+qcoza7DWKr92m3T0/3NYQFwuGgaFDej00xTERHQ7mSmTU1oS5jL2RMI46a7Bo6I2vOoe077qKJqa3SWkqMJRlG2qd0fWerxXnZdnRU0TIIWBkcYuaPiXE6yTeSdZKlRGWxw1y5Vcrmuuc5ltqqwQEBAQEBAQEBAQEBAQQXLbIJtUXVFLmx1JvL2HCOXeei/wDFoOvaMdduJ2txo3S1eF9CvbR847PJT1r2Xi+Cojcx7TixwzXtOoj5jA7wsETNEuqrt4fH2eMdW+PKUYqMl33/AFcjSPx3g/C9ZYvR0ufvfh67E/46omOvZ5sXkxP0oved+1V5Wlg/QMVxp7/seTE/Si9537U5Wk/QMVxp7/seTE/Si9537U5Wk/QMVxp7/seTE/Si9537U5Wk/QMVxp7/ALHkxP0oved+1OVpP0DFcae/7HkxP0oved+1OVpP0DFcae/7HkxP0oved+1OVpP0DFcae/7PqPJeW/lPjA2jOce64JN6F9H4exEz6VURHe79m2ZHADm4uPnPOk7twWGquanRYHR1rCR6O2Z3zKb5H5Ez1xbI/OhpfSXcuQbIwdX4jhsvV1FvPeh6R0zRYzotbavlHnPV3rksyzoqaJkMDBHGwYNHxJJxJOsnEqREZOOuXK7lU11znMttVWCAgICAgICAgICAgICAgIOTlBk7TVzA2eO8gHMlbyZWX9F2zcbwdYVJpidkpGGxV3D1a1ucvCe2FXW/wc1lPe6D+ai/AM2cDfH97Vi0knYFgqtT0Oowmn7Vey9GrPHfHnHz7UOkaWuLXAtc3zmuBa4bi04hYpjJvaK6K6daiYmOp4i4VAQEBVBB1LFydq6wj6PC5zT/AFXciEf3nA9TbzuV1NEygYnSeGw/OqznhG2ft8Vl5NcG8EBbJVEVMouIZddTtPZPn9bsNwWem3EOYxumr1/Omj0afnPbPknICyNM9QEBAQEBAQEBAQEBAQEBAQEBAQaNpWRTVIuqIIpQNBewFw6naR7FSYiWS3duWp1qKpierYi1dwYUL8Y3TwHY14e3ukBPxVk2qZbS1pzF0b5irtjyycao4J3/ANOtaRsfAb+8P/RWzZ602j8R1f8Adbj4Tl9JajuCqq1VNORvEg/QqnI9bL+46PZz3/Zkj4KJz51XC3qie783BOR61J/EkdFv5/Z06TgogHO1Uz90bGRj45yu5GEW5+IcRPNppjvn6/RIrMyJs6nILaZr3D78xMpv2gPvAPUAr4oiGtv6RxN7ZXXOXdHySEC5XIT1AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEH/9k="
-          alt="Cursos">
-       
-      </a>
-    </div>
-  </div>
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="creditos">
+            &copy; 2024 Polyglots. Todos los derechos reservados.<br>
+            Contacto: <a href="mailto:polyglots.at@gmail.com">polyglots.at@gmail.com</a> &middot;
+            <a href="privacidad.html">Política de Privacidad</a>
+        </div>
+    </footer>
 
-  <footer>
-    <div class="creditos">
-      &copy; 2024 Proyecto Políglotas. Todos los derechos reservados.
-    </div>
-  </footer>
 </body>
 </html>
-
