@@ -1,223 +1,416 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>Cursos de Idiomas</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+<title>Polyglots · Cursos de Idiomas</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        body {
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    body {
+        background: linear-gradient(135deg, #0a0f1a, #0f1a2e, #1a2a4a);
+        font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        color: #f0f7ff;
+        line-height: 1.6;
+        padding: 12px;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+    }
 
-        header {
-            background: #000033;
-            padding: 1rem 2rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .container {
+        max-width: 1050px;
+        width: 100%;
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(6px);
+        border-radius: 40px;
+        padding: 20px 18px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        border: 1px solid rgba(255,255,255,0.06);
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 24px);
+    }
 
-        .logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
+    /* ===== HEADER ===== */
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(0,0,0,0.4);
+        border-radius: 80px;
+        padding: 12px 20px;
+        margin-bottom: 28px;
+        border: 1px solid rgba(255,255,255,0.08);
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        text-decoration: none;
+        color: inherit;
+    }
 
-        .menu {
-            display: flex;
-            gap: 2rem;
-        }
+    .logo-container {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 2px solid rgba(252,211,77,0.7);
+        box-shadow: 0 0 25px rgba(252,211,77,0.35);
+        background: #0a0f1a;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        .menu a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-            font-weight: bold;
-        }
+    .logo-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
 
-        .menu a:hover {
-            opacity: 0.8;
-        }
+    .header-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #e8f3ff;
+        letter-spacing: 0.5px;
+    }
+
+    .header-sub {
+        display: block;
+        font-size: 0.7rem;
+        color: #94a3b8;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .header-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.75rem;
+        color: #fcd34d;
+        background: rgba(212,175,55,0.1);
+        border: 1px solid rgba(212,175,55,0.3);
+        border-radius: 40px;
+        padding: 8px 16px;
+        font-weight: 600;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #fcd34d, #d4af37);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+    }
+
+    .hero p {
+        color: #90a4ae;
+        font-size: 0.95rem;
+    }
+
+    .celtic-border {
+        height: 4px;
+        background: repeating-linear-gradient(90deg, #d4af37 0, #d4af37 4px, transparent 4px, transparent 8px, #94a3b8 8px, #94a3b8 12px, transparent 12px, transparent 16px);
+        opacity: 0.4;
+        margin: 0 auto 28px;
+        border-radius: 2px;
+        max-width: 520px;
+    }
+
+    /* ===== TARJETAS DE CURSOS ===== */
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 18px;
+        flex: 1;
+        align-content: start;
+    }
+
+    .course-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 12px;
+        padding: 28px 18px 22px;
+        border-radius: 26px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.25s ease;
+        overflow: hidden;
+    }
+
+    .course-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 0%, rgba(252,211,77,0.12), transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+    }
+
+    .course-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255,255,255,0.07);
+        border-color: rgba(252,211,77,0.4);
+        box-shadow: 0 14px 40px rgba(0,0,0,0.45);
+    }
+
+    .course-card:hover::before { opacity: 1; }
+
+    .course-card.active {
+        border-color: rgba(212,175,55,0.45);
+        background: rgba(212,175,55,0.07);
+    }
+
+    .course-card.locked {
+        opacity: 0.72;
+    }
+
+    .course-card.locked:hover {
+        transform: none;
+        border-color: rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.04);
+        box-shadow: none;
+    }
+
+    .course-card.locked:hover::before { opacity: 0; }
+
+    .flag-medallion {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        line-height: 1;
+        background: rgba(0,0,0,0.3);
+        border: 2px solid rgba(252,211,77,0.35);
+        box-shadow: 0 0 24px rgba(252,211,77,0.15), inset 0 0 18px rgba(0,0,0,0.35);
+        flex-shrink: 0;
+    }
+
+    .course-card.active .flag-medallion {
+        border-color: rgba(252,211,77,0.8);
+        box-shadow: 0 0 34px rgba(252,211,77,0.35), inset 0 0 18px rgba(0,0,0,0.35);
+    }
+
+    .course-name {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #fcd34d;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+    }
+
+    .course-desc {
+        font-size: 0.82rem;
+        color: #94a3b8;
+        min-height: 2.4em;
+    }
+
+    .course-action {
+        margin-top: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 11px 24px;
+        border-radius: 40px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        background: linear-gradient(135deg, #d4af37, #fcd34d);
+        color: #0b1d3a;
+        box-shadow: 0 8px 22px rgba(212,175,55,0.35);
+        transition: all 0.25s;
+        width: 100%;
+        max-width: 220px;
+    }
+
+    .course-card:hover .course-action {
+        box-shadow: 0 10px 28px rgba(212,175,55,0.55);
+        transform: scale(1.02);
+    }
+
+    .course-card.locked .course-action {
+        background: rgba(255,255,255,0.08);
+        color: #94a3b8;
+        box-shadow: none;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .badge-soon {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        font-size: 0.62rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #cbd5e1;
+        background: rgba(0,0,0,0.45);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 40px;
+        padding: 5px 10px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+        text-align: center;
+        color: #546e7a;
+        font-size: 0.75rem;
+        padding-top: 18px;
+        margin-top: 28px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* ============================================================
+       OPTIMIZACIÓN PARA TELÉFONO
+       ============================================================ */
+    @media (max-width: 700px) {
+        body { padding: 8px; }
 
         .container {
-            flex: 1;
-            padding: 120px 2rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            text-align: center;
+            padding: 14px 12px;
+            border-radius: 28px;
+            min-height: calc(100vh - 16px);
         }
 
-        .main-title {
-            margin-bottom: 3rem;
+        .header {
+            padding: 10px 14px;
+            border-radius: 60px;
+            margin-bottom: 22px;
         }
 
-        .main-title h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
+        .logo-container { width: 52px; height: 52px; }
+        .header-title { font-size: 0.9rem; }
+        .header-sub { font-size: 0.62rem; }
+        .header-badge { display: none; }
 
-        .main-title p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
+        .hero h1 { font-size: 1.65rem; }
+        .hero p { font-size: 0.85rem; }
+        .celtic-border { margin-bottom: 20px; }
 
         .courses-grid {
-            display: flex;
-            justify-content: center;
-            gap: 4rem;
-            flex-wrap: wrap;
+            grid-template-columns: 1fr;
+            gap: 14px;
         }
 
-        .course-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
+        .course-card {
+            padding: 22px 14px 18px;
+            border-radius: 22px;
+            gap: 10px;
         }
 
-        .course-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            text-decoration: none;
-            color: white;
+        .flag-medallion {
+            width: 80px;
+            height: 80px;
+            font-size: 2.5rem;
         }
 
-        .course-circle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.15);
-        }
+        .course-name { font-size: 1.05rem; }
+        .course-desc { font-size: 0.78rem; min-height: 0; }
+        .course-action { padding: 11px 18px; font-size: 0.8rem; max-width: none; }
 
-        .course-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #4CAF50;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .footer { font-size: 0.68rem; margin-top: 22px; }
+    }
 
-        footer {
-            background: #000033;
-            text-align: center;
-            padding: 1rem;
-            margin-top: auto;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 100px 1rem 1rem;
-            }
-            .courses-grid {
-                gap: 2rem;
-            }
-            .course-circle {
-                width: 150px;
-                height: 150px;
-                font-size: 5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                padding: 1rem;
-            }
-            .menu {
-                gap: 1rem;
-            }
-            .course-circle {
-                width: 130px;
-                height: 130px;
-                font-size: 4rem;
-            }
-            .course-name {
-                font-size: 1rem;
-            }
-            .main-title h1 {
-                font-size: 1.8rem;
-            }
-        }
-    </style>
+    @media (max-width: 360px) {
+        .hero h1 { font-size: 1.4rem; }
+        .header-title { font-size: 0.82rem; }
+    }
+</style>
 </head>
 <body>
-    <header>
-        <a href="index.html" class="logo">
-            <img src="https://polyglots-at.github.io/ex/logopolyglots.jpg" alt="Logo">
+
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <a href="index.html" class="brand">
+            <div class="logo-container">
+                <img src="https://polyglots-at.github.io/ex/logopolyglots.jpg" alt="Logo Polyglots">
+            </div>
+            <div>
+                <span class="header-title">Polyglots</span>
+                <span class="header-sub">Cursos de Idiomas</span>
+            </div>
         </a>
-        <nav class="menu">
-            <!-- Menú vacío como solicitaste -->
-        </nav>
+        <div class="header-badge">
+            🌍 Elige tu idioma
+        </div>
     </header>
 
-    <div class="container">
-        <div class="main-title">
-            <h1>Cursos de Idiomas</h1>
-            <p>Selecciona el idioma que deseas aprender</p>
-        </div>
-
-        <div class="courses-grid">
-            <!-- Curso de Italiano -->
-            <div class="course-item">
-                <a href="#" class="course-circle">
-                    🇮🇹
-                </a>
-                <span class="course-name">Italiano</span>
-            </div>
-
-            <!-- Curso de Inglés -->
-            <div class="course-item">
-                <a href="https://polyglots-at.github.io/contenido/cursopropedeuticoingles.html" class="course-circle">
-                    🇬🇧
-                </a>
-                <span class="course-name">Inglés</span>
-            </div>
-
-            <!-- Curso de Portugués -->
-            <div class="course-item">
-                <a href="#" class="course-circle">
-                    🇵🇹
-                </a>
-                <span class="course-name">Portugués</span>
-            </div>
-        </div>
+    <!-- ===== HERO ===== -->
+    <div class="hero">
+        <h1>Cursos de Idiomas</h1>
+        <p>Selecciona el idioma que deseas aprender</p>
     </div>
 
-    <footer>
-        <p>&copy; 2024 Proyecto Políglotas. Todos los derechos reservados.</p>
-    </footer>
+    <div class="celtic-border"></div>
+
+    <!-- ===== TARJETAS ===== -->
+    <div class="courses-grid">
+
+        <!-- Italiano -->
+        <div class="course-card locked">
+            <span class="badge-soon">Próximamente</span>
+            <div class="flag-medallion">🇮🇹</div>
+            <div class="course-name">Italiano</div>
+            <div class="course-desc">Aprende italiano desde cero con lecciones y prácticas.</div>
+            <span class="course-action">Próximamente</span>
+        </div>
+
+        <!-- Inglés (activo, nuevo enlace) -->
+        <a href="https://polyglots-at.github.io/cursodeingles" class="course-card active">
+            <div class="flag-medallion">🇬🇧</div>
+            <div class="course-name">Inglés</div>
+            <div class="course-desc">Curso completo con templos, castillos y evaluaciones.</div>
+            <span class="course-action">Entrar al curso →</span>
+        </a>
+
+        <!-- Portugués -->
+        <div class="course-card locked">
+            <span class="badge-soon">Próximamente</span>
+            <div class="flag-medallion">🇵🇹</div>
+            <div class="course-name">Portugués</div>
+            <div class="course-desc">Aprende portugués con lecciones interactivas.</div>
+            <span class="course-action">Próximamente</span>
+        </div>
+
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+        &copy; 2024 Proyecto Polyglots · Todos los derechos reservados
+    </div>
+
+</div>
+
 </body>
 </html>
