@@ -91,7 +91,7 @@
         width: 100%;
         max-width: 820px;
         margin: 0 auto;
-        min-height: 420px;
+        min-height: 320px;
     }
     .map-path-svg {
         position: absolute; inset: 0; width: 100%; height: 100%;
@@ -100,17 +100,20 @@
     .map-path-svg path { filter: drop-shadow(0 0 6px rgba(212,175,55,0.5)); }
     .temple-marker {
         position: absolute;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%) scale(var(--m-scale, 1));
+        transform-origin: center;
         z-index: 3;
         cursor: pointer;
-        width: 110px;
+        width: 104px;
         transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity .3s;
         text-align: center;
         touch-action: manipulation;
     }
-    .temple-marker:hover { transform: translate(-50%,-50%) scale(1.1); }
+    .temple-marker:hover { transform: translate(-50%,-50%) scale(calc(var(--m-scale, 1) * 1.06)); }
     .temple-marker.locked { opacity: 0.45; filter: grayscale(0.75); }
-    .temple-marker.complete .temple-svg { filter: drop-shadow(0 0 25px rgba(252,211,77,0.8)); }
+    .temple-marker.complete .temple-svg {
+        filter: drop-shadow(0 0 var(--glow, 25px) rgba(252,211,77,0.8));
+    }
     .temple-svg { width: 100%; height: auto; display: block; }
     .temple-label {
         margin-top: 4px;
@@ -219,6 +222,52 @@
     .lesson-card.done { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.07); }
     .lesson-card .icon { font-size: 1.8rem; }
     .lesson-card .name { font-size: 0.78rem; font-weight: 600; color: #b3e5fc; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* ===== VOCABULARIO DEL TEMPLO ===== */
+    .vocab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .vocab-card {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 14px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        touch-action: manipulation;
+    }
+    .vocab-card:hover {
+        border-color: rgba(252,211,77,0.4);
+        background: rgba(255,255,255,0.07);
+        transform: translateY(-2px);
+    }
+    .vocab-card .vc-body { flex: 1; min-width: 0; }
+    .vocab-card .vc-en {
+        font-weight: 700; font-size: 0.92rem; color: #f0f7ff;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .vocab-card .vc-phon {
+        font-family: monospace; font-size: 0.7rem; color: #fcd34d;
+        white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .vocab-card .vc-es { font-size: 0.78rem; color: #94a3b8; }
+    .vocab-card .vc-speak {
+        width: 32px; height: 32px; border-radius: 50%;
+        background: rgba(212,175,55,0.18);
+        border: 1px solid rgba(212,175,55,0.4);
+        color: #fcd34d; font-size: 0.85rem;
+        display: inline-flex; align-items: center; justify-content: center;
+        flex-shrink: 0; transition: all 0.2s;
+    }
+    .vocab-card .vc-speak.speaking {
+        background: #d4af37; color: #0b1d3a;
+        animation: pulse 0.8s infinite;
+    }
     /* ===== BLOQUES DE ETAPA Y CASTILLOS ===== */
     .stage-block { margin-bottom: 18px; }
     .stage-title {
@@ -320,6 +369,25 @@
         touch-action: manipulation;
     }
     .quit-btn:hover { border-color: #fcd34d; color: #fcd34d; }
+    .text-input {
+        width: 100%;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 12px;
+        padding: 14px 16px;
+        color: #fff;
+        font-size: 1rem;
+        outline: none;
+        margin-bottom: 12px;
+    }
+    .text-input:focus { border-color: rgba(212,175,55,0.6); }
+    .check-btn {
+        background: #d4af37; color: #0b1d3a;
+        font-weight: 700; padding: 12px 32px;
+        border-radius: 40px; border: none;
+        cursor: pointer; font-size: 0.9rem;
+        touch-action: manipulation;
+    }
     .result-box { text-align: center; padding: 40px 20px; }
     .result-box .emoji { font-size: 5rem; margin-bottom: 12px; }
     .result-box .score { font-size: 3.5rem; font-weight: 800; color: #fcd34d; }
@@ -368,7 +436,7 @@
         opacity: 0.4; margin: 16px 0; border-radius: 2px;
     }
 
-    /* ===== TOASTS (avisos con formato de la página) ===== */
+    /* ===== TOASTS ===== */
     .toast-container {
         position: fixed;
         top: 16px;
@@ -429,16 +497,16 @@
 
         .map-header h1 { font-size: 1.5rem; }
         .map-header p { font-size: 0.8rem; }
-        .temple-marker { width: 75px; }
-        .temple-label { font-size: 0.58rem; }
-        .temple-label .num { font-size: 0.5rem; letter-spacing: 0.5px; }
+        .temple-marker { width: 72px; }
+        .temple-label { font-size: 0.56rem; }
+        .temple-label .num { font-size: 0.48rem; letter-spacing: 0.5px; }
         .owl-marker {
-            width: 66px; height: 66px;
+            width: 62px; height: 62px;
             animation: owlHoverM 2.5s ease-in-out infinite;
         }
         @keyframes owlHoverM {
-            0%, 100% { transform: translate(-50%,-50%) translateY(-46px); }
-            50% { transform: translate(-50%,-50%) translateY(-58px); }
+            0%, 100% { transform: translate(-50%,-50%) translateY(-42px); }
+            50% { transform: translate(-50%,-50%) translateY(-54px); }
         }
 
         .kingdom-header { padding: 16px 10px; border-radius: 16px; }
@@ -450,7 +518,13 @@
         .lesson-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
         .lesson-card { padding: 14px 8px; border-radius: 14px; }
         .lesson-card .icon { font-size: 1.5rem; }
-        .lesson-card .name { font-size: 0.7rem; letter-spacing: 0.2px; }
+        .lesson-card .name { font-size: 0.68rem; letter-spacing: 0.2px; }
+
+        .vocab-grid { grid-template-columns: 1fr; gap: 8px; }
+        .vocab-card { padding: 11px 12px; }
+        .vocab-card .vc-en { font-size: 0.86rem; }
+        .vocab-card .vc-phon { font-size: 0.66rem; }
+        .vocab-card .vc-es { font-size: 0.74rem; }
 
         .stage-title { font-size: 0.7rem; }
         .castle-card { flex-wrap: wrap; padding: 12px; gap: 10px; border-radius: 14px; }
@@ -496,7 +570,7 @@
 
 <div class="container">
 
-    <!-- ===== HEADER (sin castillo al lado del título) ===== -->
+    <!-- ===== HEADER ===== -->
     <div class="header">
         <div class="logo-container" id="headerLogo">
             <img src="https://polyglots-at.github.io/image_54dbd653.jpg" alt="Polyglots" onerror="this.parentElement.classList.add('fallback')">
@@ -512,7 +586,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- VISTA: MAPA DE TEMPLOS Y CASTILLOS (EN ORDEN NUMÉRICO)        -->
+    <!-- VISTA: MAPA                                                  -->
     <!-- ============================================================ -->
     <div id="view-map" class="view active">
         <div class="map-header">
@@ -534,7 +608,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- VISTA: TEMPLO (lecciones + castillos intercalados)            -->
+    <!-- VISTA: TEMPLO                                                -->
     <!-- ============================================================ -->
     <div id="view-kingdom" class="view">
         <button class="back-btn" onclick="showView('map')">← Volver al mapa</button>
@@ -545,17 +619,20 @@
         </div>
         <div id="stagesContainer"></div>
         <div class="celtic-border"></div>
+        <h3 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.15em; color:#fcd34d; margin-bottom:12px;">📖 Vocabulario del templo</h3>
+        <div class="vocab-grid" id="vocabGrid"></div>
+        <div class="celtic-border"></div>
         <h3 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.15em; color:#fcd34d; margin-bottom:12px;">🎯 Práctica enfocada</h3>
         <div class="lesson-grid" id="practiceGrid"></div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- VISTA: EJERCICIO                                              -->
+    <!-- VISTA: EJERCICIO                                             -->
     <!-- ============================================================ -->
     <div id="view-exercise" class="view">
         <div style="margin-bottom:12px;">
             <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#94a3b8; margin-bottom:4px;">
-                <span id="exProgressLabel">Misión 1 / 10</span>
+                <span id="exProgressLabel">Misión 1 / 12</span>
                 <span id="exScore" style="color:#fcd34d; font-weight:600;">✓ 0</span>
             </div>
             <div class="progress-track"><div class="progress-fill" id="exProgressBar" style="width:0%"></div></div>
@@ -568,7 +645,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- VISTA: RESULTADOS                                             -->
+    <!-- VISTA: RESULTADOS                                            -->
     <!-- ============================================================ -->
     <div id="view-results" class="view">
         <div class="result-box">
@@ -596,7 +673,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- OVERLAY IFRAME PARA LECCIONES                                 -->
+<!-- OVERLAY LECCIÓN                                              -->
 <!-- ============================================================ -->
 <div class="lesson-overlay" id="lessonOverlay">
     <div class="lesson-overlay-header">
@@ -608,13 +685,13 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- CONTENEDOR DE AVISOS (TOASTS)                                 -->
+<!-- CONTENEDOR DE AVISOS                                         -->
 <!-- ============================================================ -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
 /* ============================================================
-   0. SONIDOS (Web Audio API – sin archivos externos)
+   0. SONIDOS (Web Audio API)
    ============================================================ */
 let audioCtx = null;
 function getAudioCtx() {
@@ -631,7 +708,6 @@ function playCorrectSound() {
         const ctx = getAudioCtx();
         if (!ctx) return;
         const now = ctx.currentTime;
-        // Arpegio ascendente agradable: C5 – E5 – G5
         [523.25, 659.25, 783.99].forEach((freq, i) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
@@ -652,7 +728,6 @@ function playWrongSound() {
         const ctx = getAudioCtx();
         if (!ctx) return;
         const now = ctx.currentTime;
-        // Dos notas descendentes suaves: A3 – E3
         [220, 164.81].forEach((freq, i) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
@@ -670,7 +745,7 @@ function playWrongSound() {
 }
 
 /* ============================================================
-   0b. AVISOS TIPO TOAST CON FORMATO DE LA PÁGINA
+   0b. TOASTS
    ============================================================ */
 function showToast(message, type = 'info', title = '') {
     const container = document.getElementById('toastContainer');
@@ -700,7 +775,7 @@ function showToast(message, type = 'info', title = '') {
 }
 
 /* ============================================================
-   1. DATOS: 8 TEMPLOS Y SUS LECCIONES
+   1. DATOS: 8 TEMPLOS
    ============================================================ */
 const TEMPLES = [
     { id: 1, title: "Fundamentos", icon: "📖", desc: "La oración, artículos y sustantivos", lessons: [
@@ -750,7 +825,7 @@ const TEMPLES = [
 ];
 
 /* ============================================================
-   2. CONSTRUCCIÓN DE CASTILLOS (2 POR TEMPLO, NUMERADOS 1..16)
+   2. CASTILLOS (2 por templo)
    ============================================================ */
 let castleSeq = 0;
 const CASTLES = [];
@@ -778,7 +853,7 @@ TEMPLES.forEach(t => {
 });
 
 /* ============================================================
-   3. FRASES POR TEMPLO
+   3. FRASES POR TEMPLO (16 cada uno)
    ============================================================ */
 const PHRASES_BY_TEMPLE = {
     1: [
@@ -787,7 +862,17 @@ const PHRASES_BY_TEMPLE = {
         { en: "He is a teacher.", es: "Él es un maestro.", sp: "ji is a TÍ-cher" },
         { en: "She has a book.", es: "Ella tiene un libro.", sp: "shi jas a buk" },
         { en: "It is a cat.", es: "Es un gato.", sp: "it is a kat" },
-        { en: "The book is on the table.", es: "El libro está sobre la mesa.", sp: "de buk is on de TÉI-bel" }
+        { en: "The book is on the table.", es: "El libro está sobre la mesa.", sp: "de buk is on de TÉI-bel" },
+        { en: "This is a red apple.", es: "Esta es una manzana roja.", sp: "dis is a red Á-pel" },
+        { en: "The dog is big.", es: "El perro es grande.", sp: "de dog is big" },
+        { en: "We are good students.", es: "Somos buenos estudiantes.", sp: "ui ar gud STIÚ-dents" },
+        { en: "The house is old.", es: "La casa es vieja.", sp: "de jáus is óuld" },
+        { en: "A boy and a girl.", es: "Un niño y una niña.", sp: "a bói and a gerl" },
+        { en: "The water is cold.", es: "El agua está fría.", sp: "de UÁ-ter is cóuld" },
+        { en: "My car is new.", es: "Mi coche es nuevo.", sp: "mái kar is niú" },
+        { en: "The children are happy.", es: "Los niños están felices.", sp: "de CHÍL-dren ar JÁ-pi" },
+        { en: "An orange and a banana.", es: "Una naranja y un plátano.", sp: "an Ó-ranch and a ba-NÁ-na" },
+        { en: "The sun is hot.", es: "El sol es caliente.", sp: "de san is jot" }
     ],
     2: [
         { en: "I am happy.", es: "Estoy feliz.", sp: "ái am JÁ-pi" },
@@ -795,14 +880,35 @@ const PHRASES_BY_TEMPLE = {
         { en: "We are here.", es: "Estamos aquí.", sp: "ui ar jír" },
         { en: "They are students.", es: "Ellos son estudiantes.", sp: "dei ar STIÚ-dents" },
         { en: "I work every day.", es: "Trabajo cada día.", sp: "ái uérk É-vri déi" },
-        { en: "She works in a hospital.", es: "Ella trabaja en un hospital.", sp: "shi uérks in a JÓS-pi-tal" }
+        { en: "She works in a hospital.", es: "Ella trabaja en un hospital.", sp: "shi uérks in a JÓS-pi-tal" },
+        { en: "He studies English.", es: "Él estudia inglés.", sp: "ji STÁ-dis ÍN-glish" },
+        { en: "I live in a small town.", es: "Vivo en un pueblo pequeño.", sp: "ái liv in a smol taun" },
+        { en: "You play soccer.", es: "Tú juegas al fútbol.", sp: "iú pléi SÓ-ker" },
+        { en: "We eat breakfast at seven.", es: "Desayunamos a las siete.", sp: "ui ít BRÉK-fast at SÉ-ven" },
+        { en: "My brother runs fast.", es: "Mi hermano corre rápido.", sp: "mái BRÁ-der rans fast" },
+        { en: "She reads a book every night.", es: "Ella lee un libro cada noche.", sp: "shi ríds a buk É-vri náit" },
+        { en: "I do not like coffee.", es: "No me gusta el café.", sp: "ái du not láik KÓ-fi" },
+        { en: "Do you speak Spanish?", es: "¿Hablas español?", sp: "du iú spík SPÁ-nish" },
+        { en: "He does not work today.", es: "Él no trabaja hoy.", sp: "ji das not uérk tu-DÉI" },
+        { en: "We want to learn.", es: "Queremos aprender.", sp: "ui uant tu lern" }
     ],
     3: [
         { en: "The book is on the table.", es: "El libro está sobre la mesa.", sp: "de buk is on de TÉI-bel" },
         { en: "She runs quickly.", es: "Ella corre rápidamente.", sp: "shi rans KUÍK-li" },
         { en: "He speaks slowly.", es: "Él habla despacio.", sp: "ji spíks SLÓU-li" },
         { en: "We go to school.", es: "Vamos a la escuela.", sp: "ui góu tu skúl" },
-        { en: "The cat is under the table.", es: "El gato está debajo de la mesa.", sp: "de kat is ÁN-der de TÉI-bel" }
+        { en: "The cat is under the table.", es: "El gato está debajo de la mesa.", sp: "de kat is ÁN-der de TÉI-bel" },
+        { en: "The keys are in the bag.", es: "Las llaves están en la bolsa.", sp: "de kís ar in de bag" },
+        { en: "She sings beautifully.", es: "Ella canta hermosamente.", sp: "shi sings BIÚ-ti-ful-li" },
+        { en: "They arrive late.", es: "Ellos llegan tarde.", sp: "dei a-RÁIV léit" },
+        { en: "The school is near the park.", es: "La escuela está cerca del parque.", sp: "de skúl is nír de park" },
+        { en: "He walks quietly.", es: "Él camina silenciosamente.", sp: "ji uóks KUÁI-et-li" },
+        { en: "My house is behind the store.", es: "Mi casa está detrás de la tienda.", sp: "mái jáus is bi-JÁIND de stor" },
+        { en: "We always study together.", es: "Siempre estudiamos juntos.", sp: "ui ÓL-ueis STÁ-di tu-GÉ-der" },
+        { en: "The bird flies above the trees.", es: "El pájaro vuela sobre los árboles.", sp: "de berd fláis a-BÁV de trís" },
+        { en: "She sometimes drinks tea.", es: "Ella a veces bebe té.", sp: "shi SÁM-taims drings tí" },
+        { en: "The pen is next to the book.", es: "El bolígrafo está junto al libro.", sp: "de pen is nekst tu de buk" },
+        { en: "He never eats fast.", es: "Él nunca come rápido.", sp: "ji NÉ-ver íts fast" }
     ],
     4: [
         { en: "Hello! How are you?", es: "¡Hola! ¿Cómo estás?", sp: "je-LÓU! jáu ar iú" },
@@ -810,35 +916,89 @@ const PHRASES_BY_TEMPLE = {
         { en: "I am from Spain.", es: "Soy de España.", sp: "ái am from spéin" },
         { en: "Nice to meet you.", es: "Encantado de conocerte.", sp: "náis tu mít iú" },
         { en: "Today is Monday.", es: "Hoy es lunes.", sp: "tu-DÉI is MÁN-dei" },
-        { en: "I have three apples.", es: "Tengo tres manzanas.", sp: "ái jav zrí Á-pels" }
+        { en: "I have three apples.", es: "Tengo tres manzanas.", sp: "ái jav zrí Á-pels" },
+        { en: "Good morning, teacher.", es: "Buenos días, maestro.", sp: "gud MÓR-ning, TÍ-cher" },
+        { en: "See you tomorrow.", es: "Hasta mañana.", sp: "sí iú tu-MÓ-rou" },
+        { en: "There are seven days in a week.", es: "Hay siete días en una semana.", sp: "der ar SÉ-ven déis in a uík" },
+        { en: "My birthday is in May.", es: "Mi cumpleaños es en mayo.", sp: "mái BÉRZ-dei is in méi" },
+        { en: "Ten, twenty, thirty.", es: "Diez, veinte, treinta.", sp: "ten, TUÉN-ti, TÉR-ti" },
+        { en: "Good evening, madam.", es: "Buenas tardes, señora.", sp: "gud ÍV-ning, MÁ-dam" },
+        { en: "What is your name?", es: "¿Cuál es tu nombre?", sp: "uát is iór néim" },
+        { en: "The months of the year.", es: "Los meses del año.", sp: "de mans of de jír" },
+        { en: "Winter is cold.", es: "El invierno es frío.", sp: "UÍN-ter is cóuld" },
+        { en: "Please and thank you.", es: "Por favor y gracias.", sp: "plís and zank iú" }
     ],
     5: [
         { en: "The apple is red.", es: "La manzana es roja.", sp: "di Á-pel is red" },
         { en: "My mother is a doctor.", es: "Mi madre es médica.", sp: "mái MÁ-der is a DÓK-tor" },
         { en: "I like pizza.", es: "Me gusta la pizza.", sp: "ái láik PÍ-tsa" },
         { en: "She wears a blue dress.", es: "Ella lleva un vestido azul.", sp: "shi uérs a blú dres" },
-        { en: "My father has black hair.", es: "Mi padre tiene el pelo negro.", sp: "mái FÁ-der jas blak jer" }
+        { en: "My father has black hair.", es: "Mi padre tiene el pelo negro.", sp: "mái FÁ-der jas blak jer" },
+        { en: "The sky is blue.", es: "El cielo es azul.", sp: "de skái is blú" },
+        { en: "My sister is ten years old.", es: "Mi hermana tiene diez años.", sp: "mái SÍS-ter is ten jírs óuld" },
+        { en: "I drink orange juice.", es: "Bebo jugo de naranja.", sp: "ái drink Ó-ranch yus" },
+        { en: "He wears a white shirt.", es: "Él lleva una camisa blanca.", sp: "ji uérs a uáit shert" },
+        { en: "The grass is green.", es: "La hierba es verde.", sp: "de gras is grín" },
+        { en: "My grandmother cooks well.", es: "Mi abuela cocina bien.", sp: "mái GRÁN-mo-der kuks uel" },
+        { en: "We eat bread and cheese.", es: "Comemos pan y queso.", sp: "ui ít bred and chís" },
+        { en: "She has brown eyes.", es: "Ella tiene ojos marrones.", sp: "shi jas bráun áis" },
+        { en: "I need a glass of water.", es: "Necesito un vaso de agua.", sp: "ái níd a glas of UÁ-ter" },
+        { en: "The banana is yellow.", es: "El plátano es amarillo.", sp: "de ba-NÁ-na is YÉ-lou" },
+        { en: "My uncle has a red car.", es: "Mi tío tiene un coche rojo.", sp: "mái ÁN-kel jas a red kar" }
     ],
     6: [
         { en: "The house is big.", es: "La casa es grande.", sp: "de jáus is big" },
         { en: "I go by car.", es: "Voy en coche.", sp: "ái góu bái kar" },
         { en: "It is raining today.", es: "Hoy está lloviendo.", sp: "it is RÉI-ning tu-DÉI" },
         { en: "The dog is in the park.", es: "El perro está en el parque.", sp: "de dog is in de park" },
-        { en: "She is a teacher.", es: "Ella es maestra.", sp: "shi is a TÍ-cher" }
+        { en: "She is a teacher.", es: "Ella es maestra.", sp: "shi is a TÍ-cher" },
+        { en: "My room has a window.", es: "Mi habitación tiene una ventana.", sp: "mái rum jas a UÍN-dou" },
+        { en: "We take the bus to work.", es: "Tomamos el autobús al trabajo.", sp: "ui téik de bas tu uérk" },
+        { en: "The sun is shining.", es: "El sol está brillando.", sp: "de san is SHÁI-ning" },
+        { en: "He is a doctor.", es: "Él es doctor.", sp: "ji is a DÓK-tor" },
+        { en: "The kitchen is small.", es: "La cocina es pequeña.", sp: "de KÍ-chen is smol" },
+        { en: "I ride my bike to school.", es: "Voy en bicicleta a la escuela.", sp: "ái ráid mái báik tu skúl" },
+        { en: "It is snowing outside.", es: "Está nevando afuera.", sp: "it is SNÓU-ing áut-sáid" },
+        { en: "The cat sleeps on the sofa.", es: "El gato duerme en el sofá.", sp: "de kat slíps on de SÓU-fa" },
+        { en: "My mother is a nurse.", es: "Mi madre es enfermera.", sp: "mái MÁ-der is a ners" },
+        { en: "The train is late.", es: "El tren está tarde.", sp: "de tréin is léit" },
+        { en: "We live near the market.", es: "Vivimos cerca del mercado.", sp: "ui liv nír de MÁR-ket" }
     ],
     7: [
         { en: "I want to learn English.", es: "Quiero aprender inglés.", sp: "ái uant tu lern ÍN-glish" },
         { en: "Can you help me?", es: "¿Puedes ayudarme?", sp: "kan iú jelp mi" },
         { en: "Where is the station?", es: "¿Dónde está la estación?", sp: "uer is de STÉI-shon" },
         { en: "How much does it cost?", es: "¿Cuánto cuesta?", sp: "jáu mach das it kost" },
-        { en: "I would like a coffee.", es: "Me gustaría un café.", sp: "ái ud láik a KÓ-fi" }
+        { en: "I would like a coffee.", es: "Me gustaría un café.", sp: "ái ud láik a KÓ-fi" },
+        { en: "What time is it?", es: "¿Qué hora es?", sp: "uát táim is it" },
+        { en: "I need a ticket to London.", es: "Necesito un boleto a Londres.", sp: "ái níd a TÍ-ket tu LÁN-don" },
+        { en: "Do you have a map?", es: "¿Tienes un mapa?", sp: "du iú jav a map" },
+        { en: "Turn left at the corner.", es: "Gira a la izquierda en la esquina.", sp: "tern left at de KÓR-ner" },
+        { en: "The restaurant is open.", es: "El restaurante está abierto.", sp: "de RÉS-to-rant is ÓU-pen" },
+        { en: "I am looking for a hotel.", es: "Estoy buscando un hotel.", sp: "ái am LÚ-king for a jo-TÉL" },
+        { en: "Excuse me, sir.", es: "Disculpe, señor.", sp: "eks-KIÚS mi, ser" },
+        { en: "How can I get there?", es: "¿Cómo puedo llegar allí?", sp: "jáu kan ái get der" },
+        { en: "I speak a little English.", es: "Hablo un poco de inglés.", sp: "ái spík a LÍ-tel ÍN-glish" },
+        { en: "Please write it down.", es: "Por favor, escríbalo.", sp: "plís ráit it dáun" },
+        { en: "Have a nice day!", es: "¡Que tengas un buen día!", sp: "jav a náis déi" }
     ],
     8: [
         { en: "I practice every day.", es: "Practico cada día.", sp: "ái PRÁK-tis É-vri déi" },
         { en: "Practice makes perfect.", es: "La práctica hace al maestro.", sp: "PRÁK-tis méiks PÉR-fekt" },
         { en: "I am learning English.", es: "Estoy aprendiendo inglés.", sp: "ái am LÉR-ning ÍN-glish" },
         { en: "Never give up.", es: "Nunca te rindas.", sp: "NÉ-ver giv ap" },
-        { en: "I will succeed.", es: "Lo lograré.", sp: "ái uil sak-SÍD" }
+        { en: "I will succeed.", es: "Lo lograré.", sp: "ái uil sak-SÍD" },
+        { en: "Reading helps me a lot.", es: "Leer me ayuda mucho.", sp: "RÍ-ding jelps mi a lot" },
+        { en: "Listening is important.", es: "Escuchar es importante.", sp: "LÍS-ning is im-PÓR-tant" },
+        { en: "I make mistakes and learn.", es: "Cometo errores y aprendo.", sp: "ái méik mis-TÉIKS and lern" },
+        { en: "Speak slowly, please.", es: "Habla despacio, por favor.", sp: "spík SLÓU-li, plís" },
+        { en: "Repeat after me.", es: "Repite después de mí.", sp: "ri-PÍT ÁF-ter mi" },
+        { en: "I understand the lesson.", es: "Entiendo la lección.", sp: "ái ÁN-der-stand de LÉ-shon" },
+        { en: "Every day is a new chance.", es: "Cada día es una nueva oportunidad.", sp: "É-vri déi is a niú chans" },
+        { en: "Keep going, you can do it.", es: "Sigue adelante, puedes hacerlo.", sp: "kíp GÓU-ing, iú kan du it" },
+        { en: "I review my notes.", es: "Reviso mis notas.", sp: "ái ri-VIÚ mái nóuts" },
+        { en: "Small steps, big results.", es: "Pasos pequeños, grandes resultados.", sp: "smol steps, big ri-SÁLTS" },
+        { en: "Learning never stops.", es: "Aprender nunca se detiene.", sp: "LÉR-ning NÉ-ver stops" }
     ]
 };
 
@@ -847,15 +1007,20 @@ const PRACTICE_TYPES = [
     { id: "translate_en", name: "Traducir ES→EN", icon: "🔠" },
     { id: "fill_blank", name: "Completar", icon: "✏️" },
     { id: "order_words", name: "Ordenar", icon: "🔀" },
-    { id: "listen", name: "Escuchar", icon: "🎧" },
+    { id: "listen", name: "Escuchar EN", icon: "🎧" },
+    { id: "listen_es", name: "Escuchar→ES", icon: "🎶" },
+    { id: "spell", name: "Deletrear", icon: "⌨️" },
+    { id: "true_false", name: "Verdadero/Falso", icon: "⚖️" },
     { id: "pronounce", name: "Pronunciar", icon: "🎤" },
     { id: "questions", name: "Preguntas", icon: "❓" }
 ];
 
+const SESSION_LEN = 12;
+
 /* ============================================================
    4. ESTADO
    ============================================================ */
-const STORAGE_KEY = "polyglots_castles_v1";
+const STORAGE_KEY = "polyglots_castles_v2";
 
 function loadState() {
     try {
@@ -943,7 +1108,7 @@ function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'
 function shuffle(a) { const b = a.slice(); for (let i = b.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
 
 /* ============================================================
-   6. SVG DEL TEMPLO Y DEL CASTILLO (IDs únicos por marcador)
+   6. SVG
    ============================================================ */
 function templeSVG(progress, uid) {
     const complete = progress >= 1;
@@ -1044,7 +1209,7 @@ function showView(name) {
 }
 
 /* ============================================================
-   8. ORDEN DE MARCADORES: Templo 1, Castillo 1, Castillo 2, Templo 2...
+   8. ORDEN DE MARCADORES
    ============================================================ */
 function getOrderedMarkers() {
     const arr = [];
@@ -1056,7 +1221,7 @@ function getOrderedMarkers() {
 }
 
 /* ============================================================
-   9. RENDER DEL MAPA (serpentina numerada + ruta SVG)
+   9. RENDER DEL MAPA (escala progresiva de castillos)
    ============================================================ */
 function renderMap() {
     const container = document.getElementById('mapContainer');
@@ -1066,11 +1231,12 @@ function renderMap() {
     const isMobile = window.innerWidth <= 600;
     const cols = isMobile ? 2 : 4;
     const rows = Math.ceil(items.length / cols);
-    const rowH = isMobile ? 140 : 190;
+    const rowH = isMobile ? 205 : 240;
 
     container.style.height = (rows * rowH) + 'px';
 
     const pts = [];
+    const totalCastles = CASTLES.length;
 
     items.forEach((item, i) => {
         const row = Math.floor(i / cols);
@@ -1093,6 +1259,10 @@ function renderMap() {
             const prog = t.lessons.length ? doneL / t.lessons.length : 0;
             const allPassed = t.stages.every(c => isCastlePassed(c.id));
 
+            // Escala progresiva del templo: 0.95 → 1.20
+            const tScale = 0.95 + ((t.id - 1) / (TEMPLES.length - 1)) * 0.25;
+            el.style.setProperty('--m-scale', tScale.toFixed(3));
+
             el.classList.add(allPassed ? 'complete' : (unlocked ? 'open' : 'locked'));
             el.innerHTML = templeSVG(prog, 'T' + t.id) + `
                 <div class="temple-label">
@@ -1105,6 +1275,12 @@ function renderMap() {
             const c = item.castle;
             const passed = isCastlePassed(c.id);
             const unlocked = isCastleUnlocked(c);
+
+            // Escala progresiva del castillo: 0.85 → 1.45
+            const cScale = 0.85 + ((c.number - 1) / (totalCastles - 1)) * 0.60;
+            el.style.setProperty('--m-scale', cScale.toFixed(3));
+            // Brillo creciente para castillos conquistados
+            el.style.setProperty('--glow', (12 + c.number * 1.6).toFixed(1) + 'px');
 
             el.classList.add(passed ? 'complete' : (unlocked ? 'open' : 'locked'));
             el.innerHTML = castleSVG(passed, 'C' + c.number) + `
@@ -1126,7 +1302,7 @@ function renderMap() {
 }
 
 /* ============================================================
-   10. LECHUZA: siguiente castillo pendiente
+   10. LECHUZA
    ============================================================ */
 function positionOwl() {
     const container = document.getElementById('mapContainer');
@@ -1181,11 +1357,13 @@ function goKingdom(templeId) {
 }
 
 function renderKingdom(t) {
+    const vocab = PHRASES_BY_TEMPLE[t.id] || [];
+
     document.getElementById('kingdomHeader').innerHTML = `
         <h2>${t.icon} Templo ${t.id} · ${escHtml(t.title)}</h2>
         <p>${escHtml(t.desc)}</p>
         <p style="margin-top:8px; font-size:0.8rem; color:#fcd34d;">
-            ${t.lessons.length} lecciones · ${t.stages.length} castillos
+            ${t.lessons.length} lecciones · ${t.stages.length} castillos · ${vocab.length} palabras
         </p>
     `;
 
@@ -1227,6 +1405,25 @@ function renderKingdom(t) {
 
     document.getElementById('stagesContainer').innerHTML = stagesHtml;
 
+    // Vocabulario del templo
+    document.getElementById('vocabGrid').innerHTML = vocab.map(p => `
+        <div class="vocab-card" data-en="${escAttr(p.en)}">
+            <div class="vc-body">
+                <div class="vc-en">${escHtml(p.en)}</div>
+                <div class="vc-phon">[${escHtml(p.sp)}]</div>
+                <div class="vc-es">${escHtml(p.es)}</div>
+            </div>
+            <span class="vc-speak">🔊</span>
+        </div>`).join('');
+
+    document.querySelectorAll('#vocabGrid .vocab-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const sp = card.querySelector('.vc-speak');
+            speak(card.dataset.en, sp);
+        });
+    });
+
+    // Práctica enfocada
     document.getElementById('practiceGrid').innerHTML = PRACTICE_TYPES.map(pt => `
         <div class="lesson-card" onclick="startExercise(${t.id}, '${pt.id}')">
             <span class="icon">${pt.icon}</span>
@@ -1237,7 +1434,7 @@ function renderKingdom(t) {
 }
 
 /* ============================================================
-   12. ABRIR LECCIÓN
+   12. LECCIÓN
    ============================================================ */
 function openLesson(templeId, lessonIdx) {
     const t = TEMPLES.find(x => x.id === templeId);
@@ -1272,7 +1469,7 @@ function updateGlobalProgress() {
 }
 
 /* ============================================================
-   13. SESIÓN DE EJERCICIOS
+   13. SESIONES
    ============================================================ */
 let currentSession = null;
 
@@ -1305,7 +1502,7 @@ function startCastle(castleId) {
         return;
     }
 
-    const exercises = generateExercises('mixed', phrases).slice(0, 10);
+    const exercises = generateExercises('mixed', phrases).slice(0, SESSION_LEN);
     if (!exercises.length) {
         showToast('No se pudieron generar preguntas. Intenta de nuevo.', 'error', 'Error');
         return;
@@ -1328,7 +1525,7 @@ function startExercise(templeId, type) {
         showToast('No hay frases disponibles para este templo.', 'error', 'Sin contenido');
         return;
     }
-    const exercises = generateExercises(type, phrases).slice(0, 10);
+    const exercises = generateExercises(type, phrases).slice(0, SESSION_LEN);
     if (!exercises.length) {
         showToast('No se pudieron generar ejercicios. Intenta de nuevo.', 'error', 'Error');
         return;
@@ -1340,7 +1537,7 @@ function startExercise(templeId, type) {
 }
 
 /* ============================================================
-   14. GENERADORES DE EJERCICIOS
+   14. GENERADORES
    ============================================================ */
 function generateExercises(type, phrases) {
     switch(type) {
@@ -1349,6 +1546,9 @@ function generateExercises(type, phrases) {
         case 'fill_blank': return shuffle(genFillBlank(phrases));
         case 'order_words': return shuffle(genOrderWords(phrases));
         case 'listen': return shuffle(genListen(phrases));
+        case 'listen_es': return shuffle(genListenES(phrases));
+        case 'spell': return shuffle(genSpell(phrases));
+        case 'true_false': return shuffle(genTrueFalse(phrases));
         case 'pronounce': return shuffle(genPronounce(phrases));
         case 'questions': return shuffle(genQuestions(phrases));
         case 'mixed': return genMixed(phrases);
@@ -1398,6 +1598,42 @@ function genListen(phrases) {
                  options: shuffle([p.en, ...d]), correct: p.en, explanation: `Escuchaste: "${p.en}" — ${p.es}` };
     });
 }
+function genListenES(phrases) {
+    return phrases.map(p => {
+        const d = shuffle(phrases.filter(x => x.es !== p.es).map(x => x.es)).slice(0, 3);
+        return { type: 'listen_es', question: 'Escucha y elige el significado en español:', audio: p.en,
+                 options: shuffle([p.es, ...d]), correct: p.es, explanation: `"${p.en}" = "${p.es}"` };
+    });
+}
+function genSpell(phrases) {
+    return phrases.map(p => ({
+        type: 'spell',
+        question: 'Escucha y escribe la frase en inglés:',
+        audio: p.en,
+        hint: p.es,
+        correct: p.en,
+        explanation: `La frase era: "${p.en}"`
+    }));
+}
+function genTrueFalse(phrases) {
+    return phrases.map(p => {
+        const isTrue = Math.random() < 0.5;
+        const others = phrases.filter(x => x.es !== p.es);
+        const fakeEs = others.length ? others[Math.floor(Math.random() * others.length)].es : p.es + ' (?)';
+        const claim = isTrue ? p.es : fakeEs;
+        return {
+            type: 'true_false',
+            question: '¿La traducción es correcta?',
+            prompt: p.en,
+            claim: claim,
+            options: ['Verdadero', 'Falso'],
+            correct: isTrue ? 'Verdadero' : 'Falso',
+            explanation: isTrue
+                ? `"${p.en}" = "${p.es}"`
+                : `"${p.en}" NO significa "${claim}", significa "${p.es}"`
+        };
+    });
+}
 function genPronounce(phrases) {
     return phrases.map(p => ({ type: 'pronounce', question: 'Pronuncia esta frase en voz alta:',
                                target: p.en, targetSp: p.sp, meaning: p.es }));
@@ -1420,9 +1656,12 @@ function genMixed(phrases) {
         ...shuffle(genTranslateEN(phrases)).slice(0, 2),
         ...shuffle(genFillBlank(phrases)).slice(0, 2),
         ...shuffle(genOrderWords(phrases)).slice(0, 2),
-        ...shuffle(genListen(phrases)).slice(0, 2),
-        ...shuffle(genPronounce(phrases)).slice(0, 2),
-        ...shuffle(genQuestions(phrases)).slice(0, 2)
+        ...shuffle(genListen(phrases)).slice(0, 1),
+        ...shuffle(genListenES(phrases)).slice(0, 1),
+        ...shuffle(genSpell(phrases)).slice(0, 1),
+        ...shuffle(genTrueFalse(phrases)).slice(0, 2),
+        ...shuffle(genPronounce(phrases)).slice(0, 1),
+        ...shuffle(genQuestions(phrases)).slice(0, 1)
     ]);
 }
 
@@ -1460,18 +1699,56 @@ function renderExercise() {
         c.querySelectorAll('[data-speak]').forEach(b => b.addEventListener('click', e => speak(b.dataset.speak, e.currentTarget)));
         c.querySelectorAll('.opt-btn').forEach(btn => btn.addEventListener('click', () => answerMultipleChoice(btn, ex)));
     }
+    else if (ex.type === 'true_false') {
+        c.innerHTML = `
+            <div class="exercise-question">${ex.question}</div>
+            <div class="exercise-prompt" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                <span style="display:flex; align-items:center; gap:8px;">
+                    ${escHtml(ex.prompt)}
+                    <button class="speak-btn" data-speak="${escAttr(ex.prompt)}">🔊</button>
+                </span>
+                <span style="color:#94a3b8; font-size:0.95rem;">→ ${escHtml(ex.claim)}</span>
+            </div>
+            <div id="optionsList">
+                ${ex.options.map((o, i) => `<button class="opt-btn" data-opt="${i}">${escHtml(o)}</button>`).join('')}
+            </div>
+            <div id="feedback"></div>
+        `;
+        c.querySelectorAll('[data-speak]').forEach(b => b.addEventListener('click', e => speak(b.dataset.speak, e.currentTarget)));
+        c.querySelectorAll('.opt-btn').forEach(btn => btn.addEventListener('click', () => answerMultipleChoice(btn, ex)));
+    }
     else if (ex.type === 'fill_blank') {
         c.innerHTML = `
             <div class="exercise-question">${ex.question}</div>
             <div class="exercise-prompt"><span>${escHtml(ex.prompt)}</span></div>
             <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:12px;">💡 ${escHtml(ex.hint)}</p>
-            <input id="fillInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:14px 16px; color:#fff; font-size:1rem; outline:none; margin-bottom:12px;" placeholder="Escribe la palabra...">
-            <button id="fillCheck" style="background:#d4af37; color:#0b1d3a; font-weight:700; padding:12px 32px; border-radius:40px; border:none; cursor:pointer; font-size:0.9rem; touch-action:manipulation;">Comprobar</button>
+            <input id="fillInput" class="text-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Escribe la palabra...">
+            <button id="fillCheck" class="check-btn">Comprobar</button>
             <div id="feedback"></div>
         `;
         document.getElementById('fillCheck').addEventListener('click', () => answerFillBlank(ex));
         document.getElementById('fillInput').addEventListener('keydown', e => { if (e.key === 'Enter') answerFillBlank(ex); });
         setTimeout(() => document.getElementById('fillInput').focus(), 50);
+    }
+    else if (ex.type === 'spell') {
+        c.innerHTML = `
+            <div class="exercise-question">${ex.question}</div>
+            <div style="text-align:center; margin:16px 0;">
+                <button id="spellPlay" style="width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,#d4af37,#fcd34d); color:#0b1d3a; font-size:1.8rem; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(212,175,55,0.5); touch-action:manipulation;">🔊</button>
+                <p style="color:#94a3b8; font-size:0.82rem; margin-top:8px;">Pulsa para escuchar y escribe lo que oyes</p>
+                <p style="color:#94a3b8; font-size:0.85rem; margin-top:6px;">💡 Significa: <span style="color:#fcd34d;">${escHtml(ex.hint)}</span></p>
+            </div>
+            <input id="spellInput" class="text-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Escribe la frase en inglés...">
+            <button id="spellCheck" class="check-btn">Comprobar</button>
+            <div id="feedback"></div>
+        `;
+        document.getElementById('spellPlay').addEventListener('click', e => speak(ex.audio, e.currentTarget));
+        document.getElementById('spellCheck').addEventListener('click', () => answerSpell(ex));
+        document.getElementById('spellInput').addEventListener('keydown', e => { if (e.key === 'Enter') answerSpell(ex); });
+        setTimeout(() => {
+            speak(ex.audio);
+            document.getElementById('spellInput').focus();
+        }, 400);
     }
     else if (ex.type === 'order_words') {
         c.innerHTML = `
@@ -1480,12 +1757,12 @@ function renderExercise() {
             <div id="answerArea" style="min-height:3.5rem; padding:12px; border-radius:12px; background:rgba(0,0,0,0.3); border:1px dashed rgba(212,175,55,0.4); margin-bottom:12px; display:flex; flex-wrap:wrap; gap:6px;"></div>
             <div id="wordsArea" style="margin-bottom:12px; display:flex; flex-wrap:wrap; gap:6px;"></div>
             <button id="orderReset" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:#94a3b8; padding:10px 20px; border-radius:40px; cursor:pointer; font-size:0.85rem; margin-right:8px; touch-action:manipulation;">↻ Reiniciar</button>
-            <button id="orderCheck" style="background:#d4af37; color:#0b1d3a; font-weight:700; padding:12px 32px; border-radius:40px; border:none; cursor:pointer; font-size:0.9rem; touch-action:manipulation;">Comprobar</button>
+            <button id="orderCheck" class="check-btn">Comprobar</button>
             <div id="feedback"></div>
         `;
         renderOrderWords(ex);
     }
-    else if (ex.type === 'listen') {
+    else if (ex.type === 'listen' || ex.type === 'listen_es') {
         c.innerHTML = `
             <div class="exercise-question">${ex.question}</div>
             <div style="text-align:center; margin:20px 0;">
@@ -1524,6 +1801,9 @@ function renderExercise() {
     }
 }
 
+/* ============================================================
+   16. RESPUESTAS
+   ============================================================ */
 function answerMultipleChoice(btn, ex) {
     const s = currentSession;
     const buttons = btn.parentElement.querySelectorAll('.opt-btn');
@@ -1531,7 +1811,6 @@ function answerMultipleChoice(btn, ex) {
     const isCorrect = btn.textContent === ex.correct;
     if (!isCorrect) btn.classList.add('incorrect'); else s.score++;
 
-    // Sonido de acierto / error
     if (isCorrect) playCorrectSound(); else playWrongSound();
 
     document.getElementById('exScore').textContent = `✓ ${s.score}`;
@@ -1555,7 +1834,6 @@ function answerFillBlank(ex) {
     const isCorrect = val === correct;
     if (isCorrect) s.score++;
 
-    // Sonido de acierto / error
     if (isCorrect) playCorrectSound(); else playWrongSound();
 
     input.disabled = true;
@@ -1565,6 +1843,38 @@ function answerFillBlank(ex) {
 
     if (isCorrect) {
         setTimeout(() => { if (currentSession === s) nextExercise(); }, 1200);
+    } else {
+        const nb = document.getElementById('nextExBtn');
+        nb.classList.add('visible');
+        nb.textContent = 'Entendido, continuar →';
+        nb.onclick = () => nextExercise();
+    }
+}
+
+function normText(s) {
+    return String(s).toLowerCase()
+        .replace(/[¿¡.,!?;:'"]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function answerSpell(ex) {
+    const s = currentSession;
+    const input = document.getElementById('spellInput');
+    const val = normText(input.value);
+    const correct = normText(ex.correct);
+    const isCorrect = val === correct && val.length > 0;
+    if (isCorrect) s.score++;
+
+    if (isCorrect) playCorrectSound(); else playWrongSound();
+
+    input.disabled = true;
+    document.getElementById('spellCheck').disabled = true;
+    document.getElementById('exScore').textContent = `✓ ${s.score}`;
+    showFeedback(isCorrect, ex, isCorrect ? '' : `Tu respuesta: "${escHtml(input.value)}"`);
+
+    if (isCorrect) {
+        setTimeout(() => { if (currentSession === s) nextExercise(); }, 1400);
     } else {
         const nb = document.getElementById('nextExBtn');
         nb.classList.add('visible');
@@ -1620,7 +1930,6 @@ function renderOrderWords(ex) {
         const isCorrect = user.toLowerCase() === ex.correct.toLowerCase();
         if (isCorrect) s.score++;
 
-        // Sonido de acierto / error
         if (isCorrect) playCorrectSound(); else playWrongSound();
 
         document.getElementById('orderCheck').disabled = true;
@@ -1657,7 +1966,7 @@ function nextExercise() {
 }
 
 /* ============================================================
-   16. RESULTADOS
+   17. RESULTADOS
    ============================================================ */
 function finishExercise() {
     const s = currentSession;
@@ -1669,7 +1978,6 @@ function finishExercise() {
     const starEls = document.querySelectorAll('#resultsStars .star');
     starEls.forEach((el, i) => el.classList.toggle('lit', i < stars));
 
-    /* ---- CASTILLO ---- */
     if (s.castleId) {
         const c = CASTLES.find(x => x.id === s.castleId);
         state.castles[s.castleId] = Math.max(castleScore(s.castleId), pct);
@@ -1694,7 +2002,6 @@ function finishExercise() {
         return;
     }
 
-    /* ---- PRÁCTICA LIBRE ---- */
     document.getElementById('resultsEmoji').textContent = pct >= 85 ? '🌟' : (pct >= 70 ? '🎉' : (pct >= 50 ? '💪' : '📚'));
     document.getElementById('resultsTitle').textContent = pct >= 85 ? '¡Excelente!' : (pct >= 70 ? '¡Muy bien!' : (pct >= 50 ? 'Buen intento' : 'Sigue practicando'));
     document.getElementById('resultsSubtitle').textContent = PRACTICE_TYPES.find(p => p.id === s.type)?.name || 'Práctica mixta';
@@ -1734,7 +2041,7 @@ function quitExercise() {
 }
 
 /* ============================================================
-   17. INICIALIZACIÓN
+   18. INICIO
    ============================================================ */
 showView('map');
 renderMap();
