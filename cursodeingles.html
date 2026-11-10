@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+<title>Polyglots · Curso de Inglés con Castillos y Evaluaciones</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+        background: linear-gradient(135deg, #0a0f1a, #0f1a2e, #1a2a4a);
+        font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        color: #f0f7ff;
+        line-height: 1.6;
+        padding: 12px;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+    }
+    .container {
+        max-width: 900px;
+        width: 100%;
+        background: rgba(255,255,255,0.04);
+        backdrop-filter: blur(6px);
+        border-radius: 40px;
+        padding: 20px 18px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        border: 1px solid rgba(255,255,255,0.06);
+        position: relative;
+    }
+    /* ===== HEADER ===== */
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(0,0,0,0.4);
+        border-radius: 80px;
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255,255,255,0.08);
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .logo-container {
+        width: 72px; height: 72px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 2px solid rgba(252,211,77,0.7);
+        box-shadow: 0 0 25px rgba(252,211,77,0.35);
+        background: #0a0f1a;
+        position: relative;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .logo-container img {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(1.15);
+        width: 100%; height: 100%;
+        object-fit: cover; object-position: center; display: block;
+    }
+    .logo-fallback {
+        display: none; width: 100%; height: 100%;
+        background: radial-gradient(circle at 30% 30%, #fcd34d, #b45309);
+        align-items: center; justify-content: center;
+        font-size: 2.5rem; color: #0b1d3a; font-weight: bold;
+        border-radius: 50%; text-shadow: 0 0 15px rgba(255,255,255,0.6);
+    }
+    .logo-container.fallback .logo-fallback { display: flex; }
+    .logo-container.fallback img { display: none; }
+    .header-title { font-size: 1.15rem; font-weight: 700; color: #e8f3ff; letter-spacing: 0.5px; }
+    .header-progress { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #94a3b8; }
+    .progress-bar-bg { width: 90px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #d4af37, #fcd34d); border-radius: 10px; transition: width 0.5s; }
+    /* ===== VISTAS ===== */
+    .view { display: none; animation: fadeSlide 0.3s ease; }
+    .view.active { display: block; }
+    @keyframes fadeSlide {
+        0% { opacity: 0; transform: translateY(15px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+    /* ===== MAPA ===== */
+    .map-header { text-align: center; margin-bottom: 20px; }
+    .map-header h1 {
+        font-size: 1.9rem; font-weight: 800;
+        background: linear-gradient(135deg, #fcd34d, #d4af37);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        background-clip: text; letter-spacing: 1px;
+    }
+    .map-header p { color: #90a4ae; font-size: 0.9rem; }
+    .map-container {
+        position: relative;
+        width: 100%;
+        max-width: 820px;
+        margin: 0 auto;
+        min-height: 420px;
+    }
+    .map-path-svg {
+        position: absolute; inset: 0; width: 100%; height: 100%;
+        pointer-events: none; z-index: 1;
+    }
+    .map-path-svg path { filter: drop-shadow(0 0 6px rgba(212,175,55,0.5)); }
+    .temple-marker {
+        position: absolute;
+        transform: translate(-50%,-50%);
+        z-index: 3;
+        cursor: pointer;
+        width: 110px;
+        transition: transform 0.3s cubic-bezier(.34,1.56,.64,1), opacity .3s;
+        text-align: center;
+        touch-action: manipulation;
+    }
+    .temple-marker:hover { transform: translate(-50%,-50%) scale(1.1); }
+    .temple-marker.locked { opacity: 0.45; filter: grayscale(0.75); }
+    .temple-marker.complete .temple-svg { filter: drop-shadow(0 0 25px rgba(252,211,77,0.8)); }
+    .temple-svg { width: 100%; height: auto; display: block; }
+    .temple-label {
+        margin-top: 4px;
+        font-size: 0.68rem;
+        color: #cbd5e1;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+        line-height: 1.2;
+    }
+    .temple-label .num {
+        display: block;
+        font-size: 0.55rem;
+        color: #fcd34d;
+        letter-spacing: 1px;
+    }
+    /* ===== LECHUZA FLOTANTE ===== */
+    .owl-marker {
+        position: absolute;
+        z-index: 5;
+        width: 96px; height: 96px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #fcd34d, #b45309);
+        box-shadow: 0 0 40px rgba(252,211,77,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+        border: 3px solid rgba(252,211,77,0.9);
+        overflow: hidden;
+        pointer-events: none;
+        animation: owlHover 2.5s ease-in-out infinite;
+        transition: left 1.2s cubic-bezier(.34,1.56,.64,1), top 1.2s cubic-bezier(.34,1.56,.64,1);
+        display: flex; align-items: center; justify-content: center;
+    }
+    @keyframes owlHover {
+        0%, 100% { transform: translate(-50%,-50%) translateY(-60px); }
+        50% { transform: translate(-50%,-50%) translateY(-76px); }
+    }
+    .owl-marker img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .owl-fallback {
+        display: none; font-size: 3rem; color: #0b1d3a; font-weight: bold;
+        text-shadow: 0 0 20px rgba(255,255,255,0.5);
+    }
+    .owl-marker.fallback .owl-fallback { display: block; }
+    .owl-marker.fallback img { display: none; }
+    /* ===== VISTA TEMPLO ===== */
+    .back-btn {
+        background: rgba(255,255,255,0.08);
+        border: none; color: #f0f7ff;
+        padding: 8px 18px; border-radius: 40px;
+        font-size: 0.85rem; font-weight: 600;
+        cursor: pointer; transition: 0.2s;
+        display: inline-flex; align-items: center; gap: 6px;
+        margin-bottom: 16px;
+        touch-action: manipulation;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.15); }
+    .kingdom-header {
+        text-align: center; padding: 20px 12px;
+        background: rgba(30,41,59,0.6);
+        border-radius: 20px;
+        border: 1px solid rgba(212,175,55,0.2);
+        margin-bottom: 18px;
+    }
+    .kingdom-header h2 { font-size: 1.7rem; font-weight: 700; color: #fcd34d; margin-bottom: 4px; }
+    .kingdom-header p { color: #94a3b8; font-size: 0.9rem; }
+    .play-btn {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        padding: 16px 44px; border-radius: 40px;
+        background: linear-gradient(135deg, #d4af37, #fcd34d);
+        color: #0b1d3a; font-weight: 800; font-size: 1.05rem; letter-spacing: 1px;
+        box-shadow: 0 8px 25px rgba(212,175,55,0.5);
+        border: none; cursor: pointer; transition: all 0.3s;
+        margin: 10px auto 20px; width: fit-content;
+        touch-action: manipulation;
+    }
+    .play-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 35px rgba(212,175,55,0.7); }
+    .eval-btn {
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        padding: 14px 36px; border-radius: 40px;
+        background: linear-gradient(135deg, #3b82f6, #1e40af);
+        color: #fff; font-weight: 800; font-size: 0.95rem; letter-spacing: 1px;
+        box-shadow: 0 8px 25px rgba(59,130,246,0.5);
+        border: none; cursor: pointer; transition: all 0.3s;
+        margin: 10px auto 20px; width: fit-content;
+        touch-action: manipulation;
+    }
+    .eval-btn:hover:not(:disabled) { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 35px rgba(59,130,246,0.7); }
+    .eval-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+    .lesson-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px; margin-bottom: 20px;
+    }
+    .lesson-card {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 16px; padding: 18px 12px;
+        text-decoration: none; color: #f0f7ff;
+        text-align: center; transition: all 0.25s;
+        display: flex; flex-direction: column; align-items: center; gap: 6px;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+    .lesson-card:hover {
+        transform: translateY(-4px);
+        background: rgba(255,255,255,0.08);
+        border-color: rgba(252,211,77,0.4);
+    }
+    .lesson-card.done { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.07); }
+    .lesson-card .icon { font-size: 1.8rem; }
+    .lesson-card .name { font-size: 0.78rem; font-weight: 600; color: #b3e5fc; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* ===== BLOQUES DE ETAPA Y CASTILLOS ===== */
+    .stage-block { margin-bottom: 18px; }
+    .stage-title {
+        font-size: 0.75rem; text-transform: uppercase;
+        letter-spacing: 0.15em; color: #fcd34d;
+        margin: 6px 0 10px;
+    }
+    .castle-card {
+        display: flex; align-items: center; gap: 14px;
+        padding: 14px 16px; border-radius: 18px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+    .castle-card .castle-emoji { font-size: 2rem; line-height: 1; }
+    .castle-card .castle-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .castle-card .castle-info strong { color: #fcd34d; font-size: 0.95rem; letter-spacing: .5px; }
+    .castle-card .castle-info span { font-size: 0.78rem; color: #94a3b8; }
+    .castle-card.locked { opacity: 0.6; }
+    .castle-card.unlocked { border-color: rgba(212,175,55,0.45); background: rgba(212,175,55,0.07); }
+    .castle-card.passed { border-color: rgba(34,197,94,0.45); background: rgba(34,197,94,0.08); }
+    .castle-card .eval-btn { margin: 0; padding: 11px 22px; font-size: 0.8rem; }
+    /* ===== OVERLAY LECCIÓN ===== */
+    .lesson-overlay {
+        position: fixed; inset: 0; background: #0a0f1a;
+        z-index: 1000; display: none; flex-direction: column;
+    }
+    .lesson-overlay.active { display: flex; }
+    .lesson-overlay-header {
+        background: rgba(0,0,0,0.9); padding: 14px 22px;
+        display: flex; align-items: center; justify-content: space-between; gap: 14px;
+        border-bottom: 1px solid rgba(212,175,55,0.25);
+        flex-shrink: 0;
+    }
+    .lesson-overlay-header .close-btn {
+        background: linear-gradient(135deg, #d4af37, #fcd34d);
+        color: #0b1d3a; border: none;
+        padding: 10px 22px; border-radius: 40px;
+        font-weight: 700; font-size: 0.9rem; cursor: pointer;
+        display: flex; align-items: center; gap: 6px;
+        box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+        touch-action: manipulation;
+    }
+    .lesson-overlay-header .close-btn:hover { transform: scale(1.03); }
+    .lesson-overlay-header .title {
+        flex: 1; text-align: center; font-weight: 700;
+        color: #fcd34d; font-size: 1rem; letter-spacing: 0.5px;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .lesson-overlay-header .spacer { width: 150px; flex-shrink: 0; }
+    .lesson-overlay iframe { flex: 1; width: 100%; border: none; background: white; }
+    /* ===== EJERCICIO ===== */
+    .exercise-container {
+        background: rgba(17,38,77,0.7);
+        border: 1px solid rgba(212,175,55,0.2);
+        border-radius: 20px; padding: 22px; margin-bottom: 16px;
+    }
+    .exercise-question { font-size: 0.85rem; color: #fcd34d; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+    .exercise-prompt {
+        background: rgba(0,0,0,0.3); border-radius: 12px;
+        padding: 18px; margin-bottom: 16px;
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        font-size: 1.35rem; font-weight: 600;
+    }
+    .exercise-prompt .phon { font-size: 0.85rem; color: #fcd34d; font-family: monospace; }
+    .opt-btn {
+        display: flex; align-items: center; gap: 8px;
+        width: 100%; text-align: left;
+        padding: 14px 18px; border-radius: 12px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: #cbd5e1; font-size: 0.95rem;
+        cursor: pointer; transition: all 0.15s; margin-bottom: 8px;
+        touch-action: manipulation;
+    }
+    .opt-btn:hover:not(:disabled) { background: rgba(212,175,55,0.12); border-color: rgba(212,175,55,0.4); }
+    .opt-btn.correct { background: rgba(34,197,94,0.15); border-color: #22c55e; color: #86efac; }
+    .opt-btn.incorrect { background: rgba(239,68,68,0.15); border-color: #ef4444; color: #fca5a5; }
+    .opt-btn:disabled { cursor: default; opacity: 0.7; }
+    .feedback-box { border-radius: 12px; padding: 14px; margin-top: 12px; font-size: 0.9rem; }
+    .feedback-box.correct { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
+    .feedback-box.incorrect { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+    .feedback-box.info { background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.4); color: #fde68a; }
+    .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 6px; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #d4af37, #fcd34d); transition: width 0.3s; border-radius: 10px; }
+    .next-btn {
+        display: none; margin-top: 12px;
+        background: linear-gradient(135deg, #d4af37, #fcd34d);
+        color: #0b1d3a; font-weight: 700;
+        padding: 12px 32px; border-radius: 40px;
+        border: none; cursor: pointer; font-size: 0.9rem; transition: all 0.2s;
+        touch-action: manipulation;
+    }
+    .next-btn:hover { transform: scale(1.03); }
+    .next-btn.visible { display: inline-block; }
+    .quit-btn {
+        background: transparent; border: 1px solid rgba(255,255,255,0.15);
+        color: #94a3b8; padding: 10px 22px; border-radius: 40px;
+        cursor: pointer; font-size: 0.85rem;
+        touch-action: manipulation;
+    }
+    .quit-btn:hover { border-color: #fcd34d; color: #fcd34d; }
+    .result-box { text-align: center; padding: 40px 20px; }
+    .result-box .emoji { font-size: 5rem; margin-bottom: 12px; }
+    .result-box .score { font-size: 3.5rem; font-weight: 800; color: #fcd34d; }
+    .result-box .detail { color: #94a3b8; margin-bottom: 24px; }
+    .result-box .status { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .result-box .status.passed { color: #22c55e; }
+    .result-box .status.failed { color: #f97316; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+        background: linear-gradient(135deg, #d4af37, #fcd34d);
+        color: #0b1d3a; font-weight: 700;
+        padding: 14px 32px; border-radius: 40px;
+        border: none; cursor: pointer; font-size: 0.95rem;
+        touch-action: manipulation;
+    }
+    .btn-secondary {
+        background: transparent; border: 1px solid rgba(255,255,255,0.2);
+        color: #cbd5e1; padding: 14px 32px; border-radius: 40px;
+        cursor: pointer; font-size: 0.95rem;
+        touch-action: manipulation;
+    }
+    .footer {
+        text-align: center; color: #546e7a; font-size: 0.75rem;
+        padding-top: 18px; margin-top: 20px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .speak-btn {
+        width: 34px; height: 34px; border-radius: 50%;
+        background: rgba(212,175,55,0.2);
+        border: 1px solid rgba(212,175,55,0.4);
+        color: #fcd34d; font-size: 0.9rem;
+        cursor: pointer; transition: all 0.2s;
+        display: inline-flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        touch-action: manipulation;
+    }
+    .speak-btn:hover { background: rgba(212,175,55,0.4); }
+    .speak-btn.speaking { background: #d4af37; color: #0b1d3a; animation: pulse 0.8s infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+    .stars { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
+    .star { font-size: 2.8rem; color: #334155; transition: color 0.3s; }
+    .star.lit { color: #fcd34d; text-shadow: 0 0 20px rgba(252,211,77,0.6); }
+    .celtic-border {
+        height: 4px;
+        background: repeating-linear-gradient(90deg, #d4af37 0, #d4af37 4px, transparent 4px, transparent 8px, #94a3b8 8px, #94a3b8 12px, transparent 12px, transparent 16px);
+        opacity: 0.4; margin: 16px 0; border-radius: 2px;
+    }
+
+    /* ===== TOASTS (avisos con formato de la página) ===== */
+    .toast-container {
+        position: fixed;
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: calc(100% - 32px);
+        max-width: 440px;
+        pointer-events: none;
+    }
+    .toast {
+        background: rgba(17,38,77,0.97);
+        border: 1px solid rgba(252,211,77,0.45);
+        border-radius: 16px;
+        padding: 13px 16px;
+        color: #f0f7ff;
+        font-size: 0.88rem;
+        box-shadow: 0 10px 35px rgba(0,0,0,0.65);
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        animation: toastIn 0.3s cubic-bezier(.34,1.56,.64,1);
+        pointer-events: auto;
+        backdrop-filter: blur(6px);
+    }
+    .toast.warn { border-color: rgba(239,68,68,0.55); }
+    .toast.info { border-color: rgba(212,175,55,0.55); }
+    .toast.success { border-color: rgba(34,197,94,0.55); }
+    .toast .toast-icon { font-size: 1.3rem; line-height: 1.1; flex-shrink: 0; }
+    .toast .toast-text { flex: 1; line-height: 1.35; }
+    .toast .toast-text strong { display: block; color: #fcd34d; margin-bottom: 2px; font-size: 0.92rem; }
+    .toast.out { animation: toastOut 0.3s ease forwards; }
+    @keyframes toastIn {
+        0% { opacity: 0; transform: translateY(-14px) scale(0.96); }
+        100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes toastOut {
+        0% { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(-10px) scale(0.97); }
+    }
+
+    /* ============================================================
+       OPTIMIZACIÓN PARA TELÉFONO
+       ============================================================ */
+    @media (max-width: 600px) {
+        body { padding: 8px; }
+        .container { padding: 14px 12px; border-radius: 28px; }
+
+        .header { padding: 10px 14px; border-radius: 60px; gap: 8px; }
+        .logo-container { width: 54px; height: 54px; border-width: 2px; }
+        .logo-fallback { font-size: 1.8rem; }
+        .header-title { font-size: 0.92rem; letter-spacing: 0.3px; }
+        .header-progress { font-size: 0.68rem; gap: 6px; }
+        .progress-bar-bg { width: 56px; height: 7px; }
+
+        .map-header h1 { font-size: 1.5rem; }
+        .map-header p { font-size: 0.8rem; }
+        .temple-marker { width: 75px; }
+        .temple-label { font-size: 0.58rem; }
+        .temple-label .num { font-size: 0.5rem; letter-spacing: 0.5px; }
+        .owl-marker {
+            width: 66px; height: 66px;
+            animation: owlHoverM 2.5s ease-in-out infinite;
+        }
+        @keyframes owlHoverM {
+            0%, 100% { transform: translate(-50%,-50%) translateY(-46px); }
+            50% { transform: translate(-50%,-50%) translateY(-58px); }
+        }
+
+        .kingdom-header { padding: 16px 10px; border-radius: 16px; }
+        .kingdom-header h2 { font-size: 1.35rem; }
+        .kingdom-header p { font-size: 0.82rem; }
+        .play-btn { width: 100%; padding: 14px 20px; font-size: 0.95rem; margin: 8px auto 16px; }
+        .eval-btn { width: 100%; padding: 12px 20px; font-size: 0.85rem; margin: 8px auto 16px; }
+
+        .lesson-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+        .lesson-card { padding: 14px 8px; border-radius: 14px; }
+        .lesson-card .icon { font-size: 1.5rem; }
+        .lesson-card .name { font-size: 0.7rem; letter-spacing: 0.2px; }
+
+        .stage-title { font-size: 0.7rem; }
+        .castle-card { flex-wrap: wrap; padding: 12px; gap: 10px; border-radius: 14px; }
+        .castle-card .castle-emoji { font-size: 1.6rem; }
+        .castle-card .castle-info strong { font-size: 0.88rem; }
+        .castle-card .castle-info span { font-size: 0.72rem; }
+        .castle-card .eval-btn { width: 100%; margin-top: 4px; padding: 11px 18px; font-size: 0.8rem; }
+
+        .exercise-container { padding: 16px; border-radius: 16px; }
+        .exercise-question { font-size: 0.78rem; }
+        .exercise-prompt { font-size: 1.15rem; padding: 14px; gap: 8px; }
+        .exercise-prompt .phon { font-size: 0.75rem; }
+        .opt-btn { padding: 13px 14px; font-size: 0.9rem; }
+        .feedback-box { font-size: 0.85rem; padding: 12px; }
+
+        .lesson-overlay-header { padding: 10px 12px; gap: 8px; }
+        .lesson-overlay-header .close-btn { padding: 8px 14px; font-size: 0.78rem; }
+        .lesson-overlay-header .title { font-size: 0.85rem; }
+        .lesson-overlay-header .spacer { width: 60px; }
+
+        .result-box { padding: 28px 10px; }
+        .result-box .emoji { font-size: 4rem; }
+        .result-box .score { font-size: 2.8rem; }
+        .result-box .status { font-size: 1.05rem; }
+        .star { font-size: 2.2rem; }
+        .btn-group { flex-direction: column; }
+        .btn-group .btn-primary, .btn-group .btn-secondary { width: 100%; }
+
+        .quit-btn { padding: 10px 18px; font-size: 0.8rem; }
+        .next-btn { padding: 11px 22px; font-size: 0.85rem; }
+
+        .footer { font-size: 0.68rem; }
+    }
+
+    @media (max-width: 360px) {
+        .lesson-grid { grid-template-columns: 1fr; }
+        .header-title { font-size: 0.85rem; }
+        .map-header h1 { font-size: 1.3rem; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ===== HEADER (sin castillo al lado del título) ===== -->
+    <div class="header">
+        <div class="logo-container" id="headerLogo">
+            <img src="https://polyglots-at.github.io/image_54dbd653.jpg" alt="Polyglots" onerror="this.parentElement.classList.add('fallback')">
+            <div class="logo-fallback">🦉</div>
+        </div>
+        <span class="header-title">Polyglots · Curso de Inglés</span>
+        <div class="header-progress">
+            <span id="globalProgressText">0%</span>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="globalProgressBar" style="width:0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VISTA: MAPA DE TEMPLOS Y CASTILLOS (EN ORDEN NUMÉRICO)        -->
+    <!-- ============================================================ -->
+    <div id="view-map" class="view active">
+        <div class="map-header">
+            <h1>El Camino de los Castillos</h1>
+            <p>Recorre los templos en orden y conquista cada castillo numerado</p>
+        </div>
+        <div class="map-container" id="mapContainer">
+            <svg class="map-path-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path id="mapPath" d=""
+                      stroke="#d4af37" stroke-width="0.6" fill="none"
+                      stroke-dasharray="1.6 1.1" stroke-linecap="round"
+                      opacity="0.45" vector-effect="non-scaling-stroke"/>
+            </svg>
+            <div class="owl-marker" id="owlMarker">
+                <img src="https://polyglots-at.github.io/image_54dbd653.jpg" alt="Polyglots volando" onerror="this.parentElement.classList.add('fallback')">
+                <div class="owl-fallback">🦉</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VISTA: TEMPLO (lecciones + castillos intercalados)            -->
+    <!-- ============================================================ -->
+    <div id="view-kingdom" class="view">
+        <button class="back-btn" onclick="showView('map')">← Volver al mapa</button>
+        <div class="kingdom-header" id="kingdomHeader"></div>
+        <div class="celtic-border"></div>
+        <div style="text-align:center;">
+            <button class="play-btn" id="playKingdomBtn">▶ PLAY · Práctica completa del templo</button>
+        </div>
+        <div id="stagesContainer"></div>
+        <div class="celtic-border"></div>
+        <h3 style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.15em; color:#fcd34d; margin-bottom:12px;">🎯 Práctica enfocada</h3>
+        <div class="lesson-grid" id="practiceGrid"></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VISTA: EJERCICIO                                              -->
+    <!-- ============================================================ -->
+    <div id="view-exercise" class="view">
+        <div style="margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#94a3b8; margin-bottom:4px;">
+                <span id="exProgressLabel">Misión 1 / 10</span>
+                <span id="exScore" style="color:#fcd34d; font-weight:600;">✓ 0</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="exProgressBar" style="width:0%"></div></div>
+        </div>
+        <div id="exerciseContainer"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+            <button class="quit-btn" onclick="quitExercise()">Salir</button>
+            <button class="next-btn" id="nextExBtn">Siguiente →</button>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- VISTA: RESULTADOS                                             -->
+    <!-- ============================================================ -->
+    <div id="view-results" class="view">
+        <div class="result-box">
+            <div class="emoji" id="resultsEmoji">🎉</div>
+            <div class="stars" id="resultsStars">
+                <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+            </div>
+            <h2 id="resultsTitle" style="font-size:1.7rem; margin-bottom:6px;">¡Misión completada!</h2>
+            <p class="detail" id="resultsSubtitle"></p>
+            <p class="score" id="resultsScore">0%</p>
+            <p class="detail" id="resultsDetail"></p>
+            <p class="status" id="resultsStatus"></p>
+            <div class="btn-group" style="margin-top:20px;">
+                <button class="btn-primary" onclick="retryExercise()">🔁 Repetir</button>
+                <button class="btn-secondary" onclick="goBackToKingdom()">Volver al templo</button>
+                <button class="btn-secondary" onclick="showView('map')">🗺️ Ver el mapa</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Proyecto Polyglots · Todos los derechos reservados</p>
+    </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- OVERLAY IFRAME PARA LECCIONES                                 -->
+<!-- ============================================================ -->
+<div class="lesson-overlay" id="lessonOverlay">
+    <div class="lesson-overlay-header">
+        <button class="close-btn" onclick="closeLesson()">← Volver</button>
+        <span class="title" id="lessonTitle">Lección</span>
+        <div class="spacer"></div>
+    </div>
+    <iframe id="lessonFrame" src="about:blank" title="Lección"></iframe>
+</div>
+
+<!-- ============================================================ -->
+<!-- CONTENEDOR DE AVISOS (TOASTS)                                 -->
+<!-- ============================================================ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   0. SONIDOS (Web Audio API – sin archivos externos)
+   ============================================================ */
+let audioCtx = null;
+function getAudioCtx() {
+    if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        audioCtx = new AC();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+}
+function playCorrectSound() {
+    try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        // Arpegio ascendente agradable: C5 – E5 – G5
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            const t = now + i * 0.075;
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.16, t + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.32);
+            osc.connect(gain).connect(ctx.destination);
+            osc.start(t);
+            osc.stop(t + 0.36);
+        });
+    } catch (e) {}
+}
+function playWrongSound() {
+    try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        // Dos notas descendentes suaves: A3 – E3
+        [220, 164.81].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            const t = now + i * 0.13;
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.14, t + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0008, t + 0.28);
+            osc.connect(gain).connect(ctx.destination);
+            osc.start(t);
+            osc.stop(t + 0.32);
+        });
+    } catch (e) {}
+}
+
+/* ============================================================
+   0b. AVISOS TIPO TOAST CON FORMATO DE LA PÁGINA
+   ============================================================ */
+function showToast(message, type = 'info', title = '') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast ' + type;
+
+    let icon = 'ℹ️';
+    if (type === 'warn')    icon = '🔒';
+    if (type === 'error')   icon = '⚠️';
+    if (type === 'success') icon = '✅';
+
+    toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <div class="toast-text">
+            ${title ? `<strong>${title}</strong>` : ''}
+            ${message}
+        </div>
+    `;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('out');
+        setTimeout(() => toast.remove(), 320);
+    }, 4200);
+}
+
+/* ============================================================
+   1. DATOS: 8 TEMPLOS Y SUS LECCIONES
+   ============================================================ */
+const TEMPLES = [
+    { id: 1, title: "Fundamentos", icon: "📖", desc: "La oración, artículos y sustantivos", lessons: [
+        { name: "La Oración", url: "https://polyglots-at.github.io/contenido/laoracionnv" },
+        { name: "Artículos", url: "https://polyglots-at.github.io/contenido/articulosnv" },
+        { name: "Sustantivos", url: "https://polyglots-at.github.io/contenido/sustantivosnv" },
+        { name: "Adjetivos", url: "https://polyglots-at.github.io/contenido/adjetivosnv" }
+    ]},
+    { id: 2, title: "Verbos Esenciales", icon: "🔧", desc: "To Be y presente simple", lessons: [
+        { name: "Verbo To Be", url: "https://polyglots-at.github.io/contenido/verbotobenv" },
+        { name: "Presente Simple", url: "https://polyglots-at.github.io/contenido/verbosenpresentesimplenv" }
+    ]},
+    { id: 3, title: "Descripciones", icon: "🎨", desc: "Adverbios y preposiciones", lessons: [
+        { name: "Adverbios", url: "https://polyglots-at.github.io/contenido/adverbiosnv.html" },
+        { name: "Preposiciones", url: "https://polyglots-at.github.io/contenido/preposicionesdelugarytiemponv" }
+    ]},
+    { id: 4, title: "Vocabulario Esencial", icon: "📚", desc: "Saludos, números y días", lessons: [
+        { name: "Saludos y Presentaciones", url: "https://polyglots-at.github.io/contenido/saludosypresentacionesvc" },
+        { name: "Números", url: "https://polyglots-at.github.io/contenido/numerosvc" },
+        { name: "Días y Estaciones", url: "https://polyglots-at.github.io/contenido/diasyestacionesvc" },
+        { name: "Meses", url: "https://polyglots-at.github.io/contenido/mesesvc" }
+    ]},
+    { id: 5, title: "Vocabulario Temático", icon: "🍎", desc: "Colores, familia y comida", lessons: [
+        { name: "Colores", url: "https://polyglots-at.github.io/contenido/coloresvc" },
+        { name: "Familia", url: "https://polyglots-at.github.io/contenido/familiavc" },
+        { name: "Comida y Bebida", url: "https://polyglots-at.github.io/contenido/comidaybebidavc" },
+        { name: "Ropa y Cuerpo", url: "https://polyglots-at.github.io/contenido/ropaycuerpovc" }
+    ]},
+    { id: 6, title: "Vida Cotidiana", icon: "🏠", desc: "Casa, transporte y clima", lessons: [
+        { name: "Casa y Lugares", url: "https://polyglots-at.github.io/contenido/casaylugaresvc" },
+        { name: "Transporte y Clima", url: "https://polyglots-at.github.io/contenido/transporteyclimavc" },
+        { name: "Animales", url: "https://polyglots-at.github.io/contenido/animalesvc" },
+        { name: "Ocupaciones", url: "https://polyglots-at.github.io/contenido/ocupacionesyprofesionesvc" }
+    ]},
+    { id: 7, title: "Actividades", icon: "✏️", desc: "Traducción y diálogos", lessons: [
+        { name: "Traducción I", url: "https://polyglots-at.github.io/contenido/traduccion1.html" },
+        { name: "Traducción II", url: "https://polyglots-at.github.io/contenido/traduccion2" },
+        { name: "Diálogo", url: "https://polyglots-at.github.io/contenido/dialogo" }
+    ]},
+    { id: 8, title: "Prácticas", icon: "📱", desc: "Ejercicios finales", lessons: [
+        { name: "Práctica 1", url: "https://polyglots-at.github.io/contenido/practica1.html" },
+        { name: "Práctica 2", url: "https://polyglots-at.github.io/contenido/practica2.html" },
+        { name: "Práctica 3", url: "https://polyglots-at.github.io/contenido/practica3.html" },
+        { name: "Práctica 4", url: "https://polyglots-at.github.io/contenido/practica4.html" },
+        { name: "Práctica 5", url: "https://polyglots-at.github.io/contenido/practica5.html" }
+    ]}
+];
+
+/* ============================================================
+   2. CONSTRUCCIÓN DE CASTILLOS (2 POR TEMPLO, NUMERADOS 1..16)
+   ============================================================ */
+let castleSeq = 0;
+const CASTLES = [];
+
+TEMPLES.forEach(t => {
+    t.stages = [];
+    const half = Math.ceil(t.lessons.length / 2);
+    const groups = [t.lessons.slice(0, half), t.lessons.slice(half)].filter(g => g.length > 0);
+
+    groups.forEach((group, gi) => {
+        castleSeq++;
+        const castle = {
+            id: 'castle-' + castleSeq,
+            number: castleSeq,
+            templeId: t.id,
+            templeTitle: t.title,
+            stageIndex: gi,
+            stageTotal: groups.length,
+            lessonIdx: group.map(l => t.lessons.indexOf(l)),
+            lessonNames: group.map(l => l.name)
+        };
+        CASTLES.push(castle);
+        t.stages.push(castle);
+    });
+});
+
+/* ============================================================
+   3. FRASES POR TEMPLO
+   ============================================================ */
+const PHRASES_BY_TEMPLE = {
+    1: [
+        { en: "I am a student.", es: "Soy un estudiante.", sp: "ái am a STIÚ-dent" },
+        { en: "You are my friend.", es: "Eres mi amigo.", sp: "iú ar mái frend" },
+        { en: "He is a teacher.", es: "Él es un maestro.", sp: "ji is a TÍ-cher" },
+        { en: "She has a book.", es: "Ella tiene un libro.", sp: "shi jas a buk" },
+        { en: "It is a cat.", es: "Es un gato.", sp: "it is a kat" },
+        { en: "The book is on the table.", es: "El libro está sobre la mesa.", sp: "de buk is on de TÉI-bel" }
+    ],
+    2: [
+        { en: "I am happy.", es: "Estoy feliz.", sp: "ái am JÁ-pi" },
+        { en: "She is tired.", es: "Ella está cansada.", sp: "shi is TÁI-erd" },
+        { en: "We are here.", es: "Estamos aquí.", sp: "ui ar jír" },
+        { en: "They are students.", es: "Ellos son estudiantes.", sp: "dei ar STIÚ-dents" },
+        { en: "I work every day.", es: "Trabajo cada día.", sp: "ái uérk É-vri déi" },
+        { en: "She works in a hospital.", es: "Ella trabaja en un hospital.", sp: "shi uérks in a JÓS-pi-tal" }
+    ],
+    3: [
+        { en: "The book is on the table.", es: "El libro está sobre la mesa.", sp: "de buk is on de TÉI-bel" },
+        { en: "She runs quickly.", es: "Ella corre rápidamente.", sp: "shi rans KUÍK-li" },
+        { en: "He speaks slowly.", es: "Él habla despacio.", sp: "ji spíks SLÓU-li" },
+        { en: "We go to school.", es: "Vamos a la escuela.", sp: "ui góu tu skúl" },
+        { en: "The cat is under the table.", es: "El gato está debajo de la mesa.", sp: "de kat is ÁN-der de TÉI-bel" }
+    ],
+    4: [
+        { en: "Hello! How are you?", es: "¡Hola! ¿Cómo estás?", sp: "je-LÓU! jáu ar iú" },
+        { en: "My name is John.", es: "Mi nombre es John.", sp: "mái néim is jon" },
+        { en: "I am from Spain.", es: "Soy de España.", sp: "ái am from spéin" },
+        { en: "Nice to meet you.", es: "Encantado de conocerte.", sp: "náis tu mít iú" },
+        { en: "Today is Monday.", es: "Hoy es lunes.", sp: "tu-DÉI is MÁN-dei" },
+        { en: "I have three apples.", es: "Tengo tres manzanas.", sp: "ái jav zrí Á-pels" }
+    ],
+    5: [
+        { en: "The apple is red.", es: "La manzana es roja.", sp: "di Á-pel is red" },
+        { en: "My mother is a doctor.", es: "Mi madre es médica.", sp: "mái MÁ-der is a DÓK-tor" },
+        { en: "I like pizza.", es: "Me gusta la pizza.", sp: "ái láik PÍ-tsa" },
+        { en: "She wears a blue dress.", es: "Ella lleva un vestido azul.", sp: "shi uérs a blú dres" },
+        { en: "My father has black hair.", es: "Mi padre tiene el pelo negro.", sp: "mái FÁ-der jas blak jer" }
+    ],
+    6: [
+        { en: "The house is big.", es: "La casa es grande.", sp: "de jáus is big" },
+        { en: "I go by car.", es: "Voy en coche.", sp: "ái góu bái kar" },
+        { en: "It is raining today.", es: "Hoy está lloviendo.", sp: "it is RÉI-ning tu-DÉI" },
+        { en: "The dog is in the park.", es: "El perro está en el parque.", sp: "de dog is in de park" },
+        { en: "She is a teacher.", es: "Ella es maestra.", sp: "shi is a TÍ-cher" }
+    ],
+    7: [
+        { en: "I want to learn English.", es: "Quiero aprender inglés.", sp: "ái uant tu lern ÍN-glish" },
+        { en: "Can you help me?", es: "¿Puedes ayudarme?", sp: "kan iú jelp mi" },
+        { en: "Where is the station?", es: "¿Dónde está la estación?", sp: "uer is de STÉI-shon" },
+        { en: "How much does it cost?", es: "¿Cuánto cuesta?", sp: "jáu mach das it kost" },
+        { en: "I would like a coffee.", es: "Me gustaría un café.", sp: "ái ud láik a KÓ-fi" }
+    ],
+    8: [
+        { en: "I practice every day.", es: "Practico cada día.", sp: "ái PRÁK-tis É-vri déi" },
+        { en: "Practice makes perfect.", es: "La práctica hace al maestro.", sp: "PRÁK-tis méiks PÉR-fekt" },
+        { en: "I am learning English.", es: "Estoy aprendiendo inglés.", sp: "ái am LÉR-ning ÍN-glish" },
+        { en: "Never give up.", es: "Nunca te rindas.", sp: "NÉ-ver giv ap" },
+        { en: "I will succeed.", es: "Lo lograré.", sp: "ái uil sak-SÍD" }
+    ]
+};
+
+const PRACTICE_TYPES = [
+    { id: "translate_es", name: "Traducir EN→ES", icon: "🔤" },
+    { id: "translate_en", name: "Traducir ES→EN", icon: "🔠" },
+    { id: "fill_blank", name: "Completar", icon: "✏️" },
+    { id: "order_words", name: "Ordenar", icon: "🔀" },
+    { id: "listen", name: "Escuchar", icon: "🎧" },
+    { id: "pronounce", name: "Pronunciar", icon: "🎤" },
+    { id: "questions", name: "Preguntas", icon: "❓" }
+];
+
+/* ============================================================
+   4. ESTADO
+   ============================================================ */
+const STORAGE_KEY = "polyglots_castles_v1";
+
+function loadState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const p = JSON.parse(raw);
+            return { lessons: p.lessons || {}, castles: p.castles || {} };
+        }
+    } catch (e) {}
+    return { lessons: {}, castles: {} };
+}
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+let state = loadState();
+
+function lessonKey(tid, idx) { return 't' + tid + 'l' + idx; }
+function isLessonDone(tid, idx) { return !!state.lessons[lessonKey(tid, idx)]; }
+function markLessonVisited(tid, idx) {
+    const k = lessonKey(tid, idx);
+    if (!state.lessons[k]) {
+        state.lessons[k] = true;
+        saveState();
+        updateGlobalProgress();
+    }
+}
+
+function castleScore(id) { return state.castles[id] || 0; }
+function isCastlePassed(id) { return castleScore(id) >= 70; }
+
+function isCastleUnlocked(c) {
+    if (c.number > 1 && !isCastlePassed(CASTLES[c.number - 2].id)) return false;
+    return c.lessonIdx.every(i => isLessonDone(c.templeId, i));
+}
+
+function isTempleUnlocked(t) {
+    if (t.id === 1) return true;
+    const prev = TEMPLES[t.id - 2];
+    const last = prev.stages[prev.stages.length - 1];
+    return isCastlePassed(last.id);
+}
+
+function getGlobalProgress() {
+    const totalLessons = TEMPLES.reduce((a, t) => a + t.lessons.length, 0);
+    const total = totalLessons + CASTLES.length;
+    if (!total) return 0;
+    let done = 0;
+    TEMPLES.forEach(t => t.lessons.forEach((l, i) => { if (isLessonDone(t.id, i)) done++; }));
+    CASTLES.forEach(c => { if (isCastlePassed(c.id)) done++; });
+    return Math.round((done / total) * 100);
+}
+
+/* ============================================================
+   5. VOZ
+   ============================================================ */
+let voices = [];
+function loadVoices() { if ('speechSynthesis' in window) voices = speechSynthesis.getVoices(); }
+if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
+function getVoice(lang) {
+    if (!voices.length) voices = speechSynthesis.getVoices();
+    if (lang.startsWith('en')) {
+        return voices.find(v => v.lang === 'en-US' && v.localService) ||
+               voices.find(v => v.lang === 'en-US') ||
+               voices.find(v => v.lang.startsWith('en'));
+    }
+    return voices.find(v => v.lang === 'es-ES' && v.localService) ||
+           voices.find(v => v.lang === 'es-ES') ||
+           voices.find(v => v.lang.startsWith('es'));
+}
+let speakingBtn = null;
+function speak(text, btn, lang = 'en-US') {
+    if (!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    if (speakingBtn) speakingBtn.classList.remove('speaking');
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = 0.85; u.pitch = 1;
+    const v = getVoice(lang); if (v) u.voice = v;
+    if (btn) {
+        btn.classList.add('speaking'); speakingBtn = btn;
+        u.onend = () => { btn.classList.remove('speaking'); speakingBtn = null; };
+        u.onerror = () => { btn.classList.remove('speaking'); speakingBtn = null; };
+    }
+    speechSynthesis.speak(u);
+}
+function escAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function shuffle(a) { const b = a.slice(); for (let i = b.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+
+/* ============================================================
+   6. SVG DEL TEMPLO Y DEL CASTILLO (IDs únicos por marcador)
+   ============================================================ */
+function templeSVG(progress, uid) {
+    const complete = progress >= 1;
+    const partial = progress > 0;
+    const marbleBase = complete ? '#f8fafc' : (partial ? '#cbd5e1' : '#475569');
+    const marbleDark = complete ? '#cbd5e1' : (partial ? '#94a3b8' : '#334155');
+    const roofColor  = complete ? '#fcd34d' : (partial ? '#b45309' : '#1e293b');
+    const windowColor= complete ? '#fef08a' : (partial ? '#fcd34d' : '#1e293b');
+    const accent     = complete ? '#fbbf24' : (partial ? '#b45309' : '#475569');
+
+    return `
+    <svg class="temple-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="mg-${uid}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="${marbleBase}"/>
+                <stop offset="1" stop-color="${marbleDark}"/>
+            </linearGradient>
+            <linearGradient id="rg-${uid}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="${roofColor}"/>
+                <stop offset="1" stop-color="${marbleDark}"/>
+            </linearGradient>
+            <radialGradient id="ag-${uid}">
+                <stop offset="0" stop-color="#fcd34d" stop-opacity="0.35"/>
+                <stop offset="1" stop-color="#fcd34d" stop-opacity="0"/>
+            </radialGradient>
+        </defs>
+        ${complete ? `<circle cx="60" cy="80" r="75" fill="url(#ag-${uid})"/>` : ''}
+        <ellipse cx="60" cy="155" rx="50" ry="6" fill="rgba(0,0,0,0.6)"/>
+        <rect x="15" y="145" width="90" height="8" fill="${marbleDark}" stroke="${accent}" stroke-width="0.5"/>
+        <rect x="20" y="137" width="80" height="8" fill="${marbleBase}" stroke="${accent}" stroke-width="0.5"/>
+        <rect x="25" y="129" width="70" height="8" fill="${marbleDark}" stroke="${accent}" stroke-width="0.5"/>
+        <rect x="28" y="60" width="10" height="69" fill="url(#mg-${uid})" stroke="#1e293b" stroke-width="1"/>
+        <rect x="44" y="60" width="10" height="69" fill="url(#mg-${uid})" stroke="#1e293b" stroke-width="1"/>
+        <rect x="66" y="60" width="10" height="69" fill="url(#mg-${uid})" stroke="#1e293b" stroke-width="1"/>
+        <rect x="82" y="60" width="10" height="69" fill="url(#mg-${uid})" stroke="#1e293b" stroke-width="1"/>
+        <rect x="20" y="48" width="80" height="10" fill="url(#mg-${uid})" stroke="#1e293b" stroke-width="1"/>
+        <polygon points="15,48 60,15 105,48" fill="url(#rg-${uid})" stroke="#1e293b" stroke-width="1.5"/>
+        <circle cx="60" cy="38" r="6" fill="${windowColor}"/>
+        <path d="M 50 129 L 50 95 Q 60 85 70 95 L 70 129 Z" fill="#0f172a" stroke="${accent}" stroke-width="1.5"/>
+        <rect x="34" y="85" width="6" height="15" fill="${windowColor}" rx="3"/>
+        <rect x="80" y="85" width="6" height="15" fill="${windowColor}" rx="3"/>
+    </svg>`;
+}
+
+function castleSVG(passed, uid) {
+    const wall     = passed ? '#93c5fd' : '#64748b';
+    const wallDark = passed ? '#3b82f6' : '#475569';
+    const flag     = passed ? '#fcd34d' : '#94a3b8';
+    const win      = passed ? '#fef08a' : '#94a3b8';
+    const edge     = '#0f172a';
+
+    return `
+    <svg class="temple-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="cw-${uid}" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="${wall}"/>
+                <stop offset="1" stop-color="${wallDark}"/>
+            </linearGradient>
+            <radialGradient id="cg-${uid}">
+                <stop offset="0" stop-color="#fcd34d" stop-opacity="0.4"/>
+                <stop offset="1" stop-color="#fcd34d" stop-opacity="0"/>
+            </radialGradient>
+        </defs>
+        ${passed ? `<circle cx="60" cy="85" r="76" fill="url(#cg-${uid})"/>` : ''}
+        <ellipse cx="60" cy="153" rx="48" ry="6" fill="rgba(0,0,0,0.55)"/>
+        <rect x="14" y="142" width="92" height="10" rx="4" fill="${wallDark}" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="18" y="72" width="26" height="70" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="1"/>
+        <rect x="18" y="64" width="7" height="9" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="27.5" y="64" width="7" height="9" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="37" y="64" width="7" height="9" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="76" y="72" width="26" height="70" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="1"/>
+        <rect x="76" y="64" width="7" height="9" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="85.5" y="64" width="7" height="9" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="95" y="64" width="7" height="9" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="46" y="44" width="28" height="98" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="1"/>
+        <rect x="46" y="35" width="7" height="10" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="56.5" y="35" width="7" height="10" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <rect x="67" y="35" width="7" height="10" fill="url(#cw-${uid})" stroke="${edge}" stroke-width="0.8"/>
+        <circle cx="31" cy="94" r="4.5" fill="${win}"/>
+        <circle cx="89" cy="94" r="4.5" fill="${win}"/>
+        <circle cx="60" cy="72" r="5.5" fill="${win}"/>
+        <path d="M 51 142 L 51 116 Q 60 104 69 116 L 69 142 Z" fill="${edge}" stroke="${flag}" stroke-width="1.2"/>
+        <line x1="60" y1="35" x2="60" y2="16" stroke="${flag}" stroke-width="2"/>
+        <polygon points="60,16 80,23 60,30" fill="${flag}"/>
+    </svg>`;
+}
+
+/* ============================================================
+   7. NAVEGACIÓN
+   ============================================================ */
+function showView(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('view-' + name);
+    if (target) target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (name !== 'exercise' && 'speechSynthesis' in window) speechSynthesis.cancel();
+    if (name === 'map') requestAnimationFrame(positionOwl);
+}
+
+/* ============================================================
+   8. ORDEN DE MARCADORES: Templo 1, Castillo 1, Castillo 2, Templo 2...
+   ============================================================ */
+function getOrderedMarkers() {
+    const arr = [];
+    TEMPLES.forEach(t => {
+        arr.push({ kind: 'temple', temple: t });
+        t.stages.forEach(c => arr.push({ kind: 'castle', castle: c }));
+    });
+    return arr;
+}
+
+/* ============================================================
+   9. RENDER DEL MAPA (serpentina numerada + ruta SVG)
+   ============================================================ */
+function renderMap() {
+    const container = document.getElementById('mapContainer');
+    container.querySelectorAll('.temple-marker').forEach(el => el.remove());
+
+    const items = getOrderedMarkers();
+    const isMobile = window.innerWidth <= 600;
+    const cols = isMobile ? 2 : 4;
+    const rows = Math.ceil(items.length / cols);
+    const rowH = isMobile ? 140 : 190;
+
+    container.style.height = (rows * rowH) + 'px';
+
+    const pts = [];
+
+    items.forEach((item, i) => {
+        const row = Math.floor(i / cols);
+        let col = i % cols;
+        if (row % 2 === 1) col = cols - 1 - col;
+
+        const xPct = ((col + 0.5) / cols) * 100;
+        const yPct = ((row + 0.5) / rows) * 100;
+        pts.push([xPct, yPct]);
+
+        const el = document.createElement('div');
+        el.className = 'temple-marker';
+        el.style.left = xPct + '%';
+        el.style.top = yPct + '%';
+
+        if (item.kind === 'temple') {
+            const t = item.temple;
+            const unlocked = isTempleUnlocked(t);
+            const doneL = t.lessons.filter((l, idx) => isLessonDone(t.id, idx)).length;
+            const prog = t.lessons.length ? doneL / t.lessons.length : 0;
+            const allPassed = t.stages.every(c => isCastlePassed(c.id));
+
+            el.classList.add(allPassed ? 'complete' : (unlocked ? 'open' : 'locked'));
+            el.innerHTML = templeSVG(prog, 'T' + t.id) + `
+                <div class="temple-label">
+                    <span class="num">TEMPLO ${t.id}</span>
+                    ${escHtml(t.title)}
+                </div>`;
+            el.addEventListener('click', () => goKingdom(t.id));
+
+        } else {
+            const c = item.castle;
+            const passed = isCastlePassed(c.id);
+            const unlocked = isCastleUnlocked(c);
+
+            el.classList.add(passed ? 'complete' : (unlocked ? 'open' : 'locked'));
+            el.innerHTML = castleSVG(passed, 'C' + c.number) + `
+                <div class="temple-label">
+                    <span class="num">CASTILLO ${c.number}</span>
+                    ${escHtml(c.templeTitle)} · Etapa ${c.stageIndex + 1}
+                </div>`;
+            el.addEventListener('click', () => startCastle(c.id));
+        }
+
+        container.appendChild(el);
+    });
+
+    const d = pts.map((p, i) => (i === 0 ? 'M ' : 'L ') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join(' ');
+    document.getElementById('mapPath').setAttribute('d', d);
+
+    positionOwl();
+    updateGlobalProgress();
+}
+
+/* ============================================================
+   10. LECHUZA: siguiente castillo pendiente
+   ============================================================ */
+function positionOwl() {
+    const container = document.getElementById('mapContainer');
+    const owl = document.getElementById('owlMarker');
+    const items = getOrderedMarkers();
+
+    let idx = items.findIndex(it => it.kind === 'castle' && !isCastlePassed(it.castle.id));
+    if (idx === -1) idx = items.length - 1;
+
+    const item = items[idx];
+    let markerIdx = idx;
+
+    if (item.kind === 'castle' && !isCastleUnlocked(item.castle) && !isCastlePassed(item.castle.id)) {
+        const tIdx = items.findIndex(it => it.kind === 'temple' && it.temple.id === item.castle.templeId);
+        if (tIdx >= 0) markerIdx = tIdx;
+    }
+
+    const markers = container.querySelectorAll('.temple-marker');
+    const target = markers[markerIdx];
+    if (!target) return;
+
+    requestAnimationFrame(() => {
+        const contRect = container.getBoundingClientRect();
+        const r = target.getBoundingClientRect();
+        if (!contRect.width || !contRect.height) return;
+        owl.style.left = (((r.left + r.width / 2) - contRect.left) / contRect.width * 100) + '%';
+        owl.style.top  = ((r.top - contRect.top) / contRect.height * 100) + '%';
+    });
+}
+
+/* ============================================================
+   11. VISTA TEMPLO
+   ============================================================ */
+let currentTempleId = null;
+
+function goKingdom(templeId) {
+    const t = TEMPLES.find(x => x.id === templeId);
+    if (!t) return;
+
+    if (!isTempleUnlocked(t)) {
+        showToast(
+            `Debes conquistar el último castillo del Templo ${templeId - 1} para entrar aquí.`,
+            'warn',
+            'Templo bloqueado'
+        );
+        return;
+    }
+
+    currentTempleId = templeId;
+    renderKingdom(t);
+    showView('kingdom');
+}
+
+function renderKingdom(t) {
+    document.getElementById('kingdomHeader').innerHTML = `
+        <h2>${t.icon} Templo ${t.id} · ${escHtml(t.title)}</h2>
+        <p>${escHtml(t.desc)}</p>
+        <p style="margin-top:8px; font-size:0.8rem; color:#fcd34d;">
+            ${t.lessons.length} lecciones · ${t.stages.length} castillos
+        </p>
+    `;
+
+    const stagesHtml = t.stages.map((c, si) => {
+        const lessonsHtml = c.lessonIdx.map(li => {
+            const l = t.lessons[li];
+            const done = isLessonDone(t.id, li);
+            return `<div class="lesson-card${done ? ' done' : ''}" onclick="openLesson(${t.id}, ${li})">
+                <span class="icon">${done ? '✅' : '📄'}</span>
+                <span class="name">${escHtml(l.name)}</span>
+            </div>`;
+        }).join('');
+
+        const passed = isCastlePassed(c.id);
+        const unlocked = isCastleUnlocked(c);
+        const stateCls = passed ? 'passed' : (unlocked ? 'unlocked' : 'locked');
+        const statusTxt = passed
+            ? `Aprobado · ${castleScore(c.id)}%`
+            : (unlocked
+                ? '¡Listo! Entra y demuestra lo aprendido'
+                : 'Bloqueado · completa las lecciones de esta etapa');
+
+        return `
+        <div class="stage-block">
+            <h3 class="stage-title">Etapa ${si + 1} · Lecciones</h3>
+            <div class="lesson-grid">${lessonsHtml}</div>
+            <div class="castle-card ${stateCls}">
+                <div class="castle-emoji">🏰</div>
+                <div class="castle-info">
+                    <strong>Castillo ${c.number}</strong>
+                    <span>${statusTxt}</span>
+                </div>
+                <button class="eval-btn" ${(!unlocked && !passed) ? 'disabled' : ''} onclick="startCastle('${c.id}')">
+                    ${passed ? 'Repetir' : 'Entrar'}
+                </button>
+            </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('stagesContainer').innerHTML = stagesHtml;
+
+    document.getElementById('practiceGrid').innerHTML = PRACTICE_TYPES.map(pt => `
+        <div class="lesson-card" onclick="startExercise(${t.id}, '${pt.id}')">
+            <span class="icon">${pt.icon}</span>
+            <span class="name">${escHtml(pt.name)}</span>
+        </div>`).join('');
+
+    document.getElementById('playKingdomBtn').onclick = () => startExercise(t.id, 'mixed');
+}
+
+/* ============================================================
+   12. ABRIR LECCIÓN
+   ============================================================ */
+function openLesson(templeId, lessonIdx) {
+    const t = TEMPLES.find(x => x.id === templeId);
+    if (!t) return;
+    const l = t.lessons[lessonIdx];
+    if (!l) return;
+
+    document.getElementById('lessonFrame').src = l.url;
+    document.getElementById('lessonTitle').textContent = l.name;
+    document.getElementById('lessonOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    markLessonVisited(templeId, lessonIdx);
+}
+
+function closeLesson() {
+    document.getElementById('lessonOverlay').classList.remove('active');
+    document.getElementById('lessonFrame').src = 'about:blank';
+    document.body.style.overflow = '';
+
+    if (currentTempleId) {
+        const t = TEMPLES.find(x => x.id === currentTempleId);
+        if (t) renderKingdom(t);
+    }
+    renderMap();
+}
+
+function updateGlobalProgress() {
+    const pct = getGlobalProgress();
+    document.getElementById('globalProgressBar').style.width = pct + '%';
+    document.getElementById('globalProgressText').textContent = pct + '%';
+}
+
+/* ============================================================
+   13. SESIÓN DE EJERCICIOS
+   ============================================================ */
+let currentSession = null;
+
+function startCastle(castleId) {
+    const c = CASTLES.find(x => x.id === castleId);
+    if (!c) return;
+
+    if (!isCastleUnlocked(c) && !isCastlePassed(c.id)) {
+        const missing = c.lessonIdx.filter(i => !isLessonDone(c.templeId, i));
+        if (missing.length) {
+            const names = missing.map(i => TEMPLES[c.templeId - 1].lessons[i].name).join(', ');
+            showToast(
+                `Completa estas lecciones primero: <b>${escHtml(names)}</b>`,
+                'warn',
+                `Castillo ${c.number} bloqueado`
+            );
+        } else {
+            showToast(
+                `Debes aprobar el Castillo ${c.number - 1} primero.`,
+                'warn',
+                `Castillo ${c.number} bloqueado`
+            );
+        }
+        return;
+    }
+
+    const phrases = PHRASES_BY_TEMPLE[c.templeId] || [];
+    if (!phrases.length) {
+        showToast('No hay frases disponibles para este castillo.', 'error', 'Sin contenido');
+        return;
+    }
+
+    const exercises = generateExercises('mixed', phrases).slice(0, 10);
+    if (!exercises.length) {
+        showToast('No se pudieron generar preguntas. Intenta de nuevo.', 'error', 'Error');
+        return;
+    }
+
+    currentSession = {
+        castleId: c.id,
+        type: 'evaluation',
+        exercises: exercises,
+        currentIndex: 0,
+        score: 0
+    };
+    showView('exercise');
+    renderExercise();
+}
+
+function startExercise(templeId, type) {
+    const phrases = PHRASES_BY_TEMPLE[templeId] || [];
+    if (!phrases.length) {
+        showToast('No hay frases disponibles para este templo.', 'error', 'Sin contenido');
+        return;
+    }
+    const exercises = generateExercises(type, phrases).slice(0, 10);
+    if (!exercises.length) {
+        showToast('No se pudieron generar ejercicios. Intenta de nuevo.', 'error', 'Error');
+        return;
+    }
+
+    currentSession = { templeId, type, exercises, currentIndex: 0, score: 0 };
+    showView('exercise');
+    renderExercise();
+}
+
+/* ============================================================
+   14. GENERADORES DE EJERCICIOS
+   ============================================================ */
+function generateExercises(type, phrases) {
+    switch(type) {
+        case 'translate_es': return shuffle(genTranslateES(phrases));
+        case 'translate_en': return shuffle(genTranslateEN(phrases));
+        case 'fill_blank': return shuffle(genFillBlank(phrases));
+        case 'order_words': return shuffle(genOrderWords(phrases));
+        case 'listen': return shuffle(genListen(phrases));
+        case 'pronounce': return shuffle(genPronounce(phrases));
+        case 'questions': return shuffle(genQuestions(phrases));
+        case 'mixed': return genMixed(phrases);
+        default: return [];
+    }
+}
+
+function genTranslateES(phrases) {
+    return phrases.map(p => {
+        const d = shuffle(phrases.filter(x => x.es !== p.es).map(x => x.es)).slice(0, 3);
+        return { type: 'translate_es', question: '¿Qué significa en español?', prompt: p.en, promptSp: p.sp,
+                 options: shuffle([p.es, ...d]), correct: p.es, explanation: `"${p.en}" significa "${p.es}"` };
+    });
+}
+function genTranslateEN(phrases) {
+    return phrases.map(p => {
+        const d = shuffle(phrases.filter(x => x.en !== p.en).map(x => x.en)).slice(0, 3);
+        return { type: 'translate_en', question: '¿Cómo se dice en inglés?', prompt: p.es,
+                 options: shuffle([p.en, ...d]), correct: p.en, explanation: `"${p.es}" se dice "${p.en}"` };
+    });
+}
+function genFillBlank(phrases) {
+    return phrases.map(p => {
+        const words = p.en.split(/\s+/);
+        if (words.length < 2) return null;
+        const idx = 1 + Math.floor(Math.random() * (words.length - 1));
+        const word = words[idx].replace(/[.,!?;:'"]+$/, '').replace(/^[.,!?;:'"]+/, '');
+        const blanked = words.map((w, i) => i === idx ? '___' : w).join(' ');
+        return { type: 'fill_blank', question: 'Escribe la palabra que falta:', prompt: blanked,
+                 hint: p.es, correct: word, explanation: `Frase completa: "${p.en}"` };
+    }).filter(Boolean);
+}
+function genOrderWords(phrases) {
+    return phrases.map(p => {
+        const words = p.en.split(/\s+/);
+        if (words.length < 3) return null;
+        let sh = shuffle([...words]);
+        if (sh.join(' ') === words.join(' ')) [sh[0], sh[1]] = [sh[1], sh[0]];
+        return { type: 'order_words', question: 'Ordena las palabras:', prompt: p.es,
+                 words: sh, correct: p.en, explanation: `La oración correcta es: "${p.en}"` };
+    }).filter(Boolean);
+}
+function genListen(phrases) {
+    return phrases.map(p => {
+        const d = shuffle(phrases.filter(x => x.en !== p.en).map(x => x.en)).slice(0, 3);
+        return { type: 'listen', question: 'Escucha y elige la frase que oíste:', audio: p.en,
+                 options: shuffle([p.en, ...d]), correct: p.en, explanation: `Escuchaste: "${p.en}" — ${p.es}` };
+    });
+}
+function genPronounce(phrases) {
+    return phrases.map(p => ({ type: 'pronounce', question: 'Pronuncia esta frase en voz alta:',
+                               target: p.en, targetSp: p.sp, meaning: p.es }));
+}
+function genQuestions(phrases) {
+    const qs = [];
+    phrases.forEach(p => {
+        const d1 = shuffle(phrases.filter(x => x.es !== p.es).map(x => x.es)).slice(0, 3);
+        qs.push({ type: 'question', question: `¿Qué significa "${p.en}" en español?`,
+                  options: shuffle([p.es, ...d1]), correct: p.es, explanation: `"${p.en}" = "${p.es}"` });
+        const d2 = shuffle(phrases.filter(x => x.en !== p.en).map(x => x.en)).slice(0, 3);
+        qs.push({ type: 'question', question: `¿Cómo se dice "${p.es}" en inglés?`,
+                  options: shuffle([p.en, ...d2]), correct: p.en, explanation: `"${p.es}" = "${p.en}"` });
+    });
+    return qs;
+}
+function genMixed(phrases) {
+    return shuffle([
+        ...shuffle(genTranslateES(phrases)).slice(0, 2),
+        ...shuffle(genTranslateEN(phrases)).slice(0, 2),
+        ...shuffle(genFillBlank(phrases)).slice(0, 2),
+        ...shuffle(genOrderWords(phrases)).slice(0, 2),
+        ...shuffle(genListen(phrases)).slice(0, 2),
+        ...shuffle(genPronounce(phrases)).slice(0, 2),
+        ...shuffle(genQuestions(phrases)).slice(0, 2)
+    ]);
+}
+
+/* ============================================================
+   15. RENDER DEL EJERCICIO
+   ============================================================ */
+function renderExercise() {
+    const s = currentSession;
+    if (!s) return;
+    if (s.currentIndex >= s.exercises.length) { finishExercise(); return; }
+
+    const ex = s.exercises[s.currentIndex];
+    const total = s.exercises.length;
+
+    document.getElementById('exProgressLabel').textContent = `Misión ${s.currentIndex + 1} / ${total}`;
+    document.getElementById('exScore').textContent = `✓ ${s.score}`;
+    document.getElementById('exProgressBar').style.width = ((s.currentIndex / total) * 100) + '%';
+    document.getElementById('nextExBtn').classList.remove('visible');
+
+    const c = document.getElementById('exerciseContainer');
+
+    if (['translate_es', 'translate_en', 'question'].includes(ex.type)) {
+        c.innerHTML = `
+            <div class="exercise-question">${ex.question}</div>
+            <div class="exercise-prompt">
+                <span>${escHtml(ex.prompt || '')}</span>
+                ${ex.prompt ? `<button class="speak-btn" data-speak="${escAttr(ex.prompt)}">🔊</button>` : ''}
+                ${ex.promptSp ? `<span class="phon">[${escHtml(ex.promptSp)}]</span>` : ''}
+            </div>
+            <div id="optionsList">
+                ${ex.options.map((o, i) => `<button class="opt-btn" data-opt="${i}">${escHtml(o)}</button>`).join('')}
+            </div>
+            <div id="feedback"></div>
+        `;
+        c.querySelectorAll('[data-speak]').forEach(b => b.addEventListener('click', e => speak(b.dataset.speak, e.currentTarget)));
+        c.querySelectorAll('.opt-btn').forEach(btn => btn.addEventListener('click', () => answerMultipleChoice(btn, ex)));
+    }
+    else if (ex.type === 'fill_blank') {
+        c.innerHTML = `
+            <div class="exercise-question">${ex.question}</div>
+            <div class="exercise-prompt"><span>${escHtml(ex.prompt)}</span></div>
+            <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:12px;">💡 ${escHtml(ex.hint)}</p>
+            <input id="fillInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:14px 16px; color:#fff; font-size:1rem; outline:none; margin-bottom:12px;" placeholder="Escribe la palabra...">
+            <button id="fillCheck" style="background:#d4af37; color:#0b1d3a; font-weight:700; padding:12px 32px; border-radius:40px; border:none; cursor:pointer; font-size:0.9rem; touch-action:manipulation;">Comprobar</button>
+            <div id="feedback"></div>
+        `;
+        document.getElementById('fillCheck').addEventListener('click', () => answerFillBlank(ex));
+        document.getElementById('fillInput').addEventListener('keydown', e => { if (e.key === 'Enter') answerFillBlank(ex); });
+        setTimeout(() => document.getElementById('fillInput').focus(), 50);
+    }
+    else if (ex.type === 'order_words') {
+        c.innerHTML = `
+            <div class="exercise-question">${ex.question}</div>
+            <p style="color:#cbd5e1; margin-bottom:12px;">${escHtml(ex.prompt)}</p>
+            <div id="answerArea" style="min-height:3.5rem; padding:12px; border-radius:12px; background:rgba(0,0,0,0.3); border:1px dashed rgba(212,175,55,0.4); margin-bottom:12px; display:flex; flex-wrap:wrap; gap:6px;"></div>
+            <div id="wordsArea" style="margin-bottom:12px; display:flex; flex-wrap:wrap; gap:6px;"></div>
+            <button id="orderReset" style="background:transparent; border:1px solid rgba(255,255,255,0.15); color:#94a3b8; padding:10px 20px; border-radius:40px; cursor:pointer; font-size:0.85rem; margin-right:8px; touch-action:manipulation;">↻ Reiniciar</button>
+            <button id="orderCheck" style="background:#d4af37; color:#0b1d3a; font-weight:700; padding:12px 32px; border-radius:40px; border:none; cursor:pointer; font-size:0.9rem; touch-action:manipulation;">Comprobar</button>
+            <div id="feedback"></div>
+        `;
+        renderOrderWords(ex);
+    }
+    else if (ex.type === 'listen') {
+        c.innerHTML = `
+            <div class="exercise-question">${ex.question}</div>
+            <div style="text-align:center; margin:20px 0;">
+                <button id="listenPlay" style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#d4af37,#fcd34d); color:#0b1d3a; font-size:2rem; border:none; cursor:pointer; box-shadow:0 4px 20px rgba(212,175,55,0.5); touch-action:manipulation;">🔊</button>
+                <p style="color:#94a3b8; font-size:0.85rem; margin-top:8px;">Pulsa para escuchar</p>
+            </div>
+            <div id="optionsList">
+                ${ex.options.map((o, i) => `<button class="opt-btn" data-opt="${i}">${escHtml(o)}</button>`).join('')}
+            </div>
+            <div id="feedback"></div>
+        `;
+        document.getElementById('listenPlay').addEventListener('click', e => speak(ex.audio, e.currentTarget));
+        c.querySelectorAll('.opt-btn').forEach(btn => btn.addEventListener('click', () => answerMultipleChoice(btn, ex)));
+        setTimeout(() => speak(ex.audio), 400);
+    }
+    else if (ex.type === 'pronounce') {
+        c.innerHTML = `
+            <div class="exercise-question">${ex.question}</div>
+            <div style="text-align:center; margin:20px 0;">
+                <p style="font-size:1.9rem; font-weight:700; margin-bottom:4px;">${escHtml(ex.target)}</p>
+                <p style="color:#fcd34d; font-family:monospace; font-size:0.9rem; margin-bottom:6px;">[${escHtml(ex.targetSp)}]</p>
+                <p style="color:#94a3b8; font-size:0.9rem; margin-bottom:18px;">${escHtml(ex.meaning)}</p>
+                <button id="pronListen" class="speak-btn" style="width:52px; height:52px; font-size:1.4rem;">🔊</button>
+            </div>
+            <div id="feedback"></div>
+        `;
+        document.getElementById('pronListen').addEventListener('click', e => speak(ex.target, e.currentTarget));
+        setTimeout(() => {
+            const fb = document.getElementById('feedback');
+            fb.innerHTML = `<div class="feedback-box info">💡 Escucha el modelo y repite en voz alta.</div>`;
+            const nb = document.getElementById('nextExBtn');
+            nb.classList.add('visible');
+            nb.textContent = 'Ya lo practiqué →';
+            nb.onclick = () => { s.score++; nextExercise(); };
+        }, 500);
+    }
+}
+
+function answerMultipleChoice(btn, ex) {
+    const s = currentSession;
+    const buttons = btn.parentElement.querySelectorAll('.opt-btn');
+    buttons.forEach(b => { b.disabled = true; if (b.textContent === ex.correct) b.classList.add('correct'); });
+    const isCorrect = btn.textContent === ex.correct;
+    if (!isCorrect) btn.classList.add('incorrect'); else s.score++;
+
+    // Sonido de acierto / error
+    if (isCorrect) playCorrectSound(); else playWrongSound();
+
+    document.getElementById('exScore').textContent = `✓ ${s.score}`;
+    showFeedback(isCorrect, ex);
+
+    if (isCorrect) {
+        setTimeout(() => { if (currentSession === s) nextExercise(); }, 1200);
+    } else {
+        const nb = document.getElementById('nextExBtn');
+        nb.classList.add('visible');
+        nb.textContent = 'Entendido, continuar →';
+        nb.onclick = () => nextExercise();
+    }
+}
+
+function answerFillBlank(ex) {
+    const s = currentSession;
+    const input = document.getElementById('fillInput');
+    const val = input.value.trim().toLowerCase().replace(/[.,!?;:'"]/g, '');
+    const correct = ex.correct.toLowerCase().replace(/[.,!?;:'"]/g, '');
+    const isCorrect = val === correct;
+    if (isCorrect) s.score++;
+
+    // Sonido de acierto / error
+    if (isCorrect) playCorrectSound(); else playWrongSound();
+
+    input.disabled = true;
+    document.getElementById('fillCheck').disabled = true;
+    document.getElementById('exScore').textContent = `✓ ${s.score}`;
+    showFeedback(isCorrect, ex);
+
+    if (isCorrect) {
+        setTimeout(() => { if (currentSession === s) nextExercise(); }, 1200);
+    } else {
+        const nb = document.getElementById('nextExBtn');
+        nb.classList.add('visible');
+        nb.textContent = 'Entendido, continuar →';
+        nb.onclick = () => nextExercise();
+    }
+}
+
+function renderOrderWords(ex) {
+    const s = currentSession;
+    let placed = [];
+    let available = ex.words.map((w, i) => ({ w, used: false }));
+
+    function draw() {
+        const wa = document.getElementById('wordsArea');
+        wa.innerHTML = available.map((it, i) => it.used ? '' :
+            `<span class="word-chip" data-idx="${i}" style="padding:10px 16px; border-radius:8px; background:rgba(212,175,55,0.15); border:1px solid rgba(212,175,55,0.4); color:#fde68a; cursor:pointer; font-size:0.95rem; touch-action:manipulation;">${escHtml(it.w)}</span>`
+        ).join('');
+        wa.querySelectorAll('.word-chip').forEach(ch => {
+            ch.addEventListener('click', () => {
+                const i = parseInt(ch.dataset.idx);
+                if (available[i].used) return;
+                available[i].used = true;
+                placed.push({ w: available[i].w, idx: i });
+                draw();
+            });
+        });
+
+        const ans = document.getElementById('answerArea');
+        ans.innerHTML = placed.length
+            ? placed.map((p, j) => `<span class="answer-slot" data-j="${j}" style="padding:10px 16px; border-radius:8px; background:rgba(17,38,77,0.8); border:1px dashed rgba(212,175,55,0.4); color:#fde68a; cursor:pointer; font-size:0.95rem; touch-action:manipulation;">${escHtml(p.w)}</span>`).join('')
+            : '<span style="color:#64748b; font-size:0.9rem;">Toca las palabras de abajo…</span>';
+        ans.querySelectorAll('.answer-slot').forEach(sl => {
+            sl.addEventListener('click', () => {
+                const j = parseInt(sl.dataset.j);
+                available[placed[j].idx].used = false;
+                placed.splice(j, 1);
+                draw();
+            });
+        });
+    }
+
+    draw();
+
+    document.getElementById('orderReset').addEventListener('click', () => {
+        placed = [];
+        available = ex.words.map(w => ({ w, used: false }));
+        draw();
+    });
+
+    document.getElementById('orderCheck').addEventListener('click', () => {
+        const user = placed.map(p => p.w).join(' ').trim();
+        const isCorrect = user.toLowerCase() === ex.correct.toLowerCase();
+        if (isCorrect) s.score++;
+
+        // Sonido de acierto / error
+        if (isCorrect) playCorrectSound(); else playWrongSound();
+
+        document.getElementById('orderCheck').disabled = true;
+        document.querySelectorAll('.word-chip').forEach(c => c.style.pointerEvents = 'none');
+        document.getElementById('exScore').textContent = `✓ ${s.score}`;
+        showFeedback(isCorrect, ex, `Tu respuesta: "${escHtml(user)}"`);
+
+        if (isCorrect) {
+            setTimeout(() => { if (currentSession === s) nextExercise(); }, 1200);
+        } else {
+            const nb = document.getElementById('nextExBtn');
+            nb.classList.add('visible');
+            nb.textContent = 'Entendido, continuar →';
+            nb.onclick = () => nextExercise();
+        }
+    });
+}
+
+function showFeedback(correct, ex, extra) {
+    const fb = document.getElementById('feedback');
+    if (!fb) return;
+    fb.innerHTML = `<div class="feedback-box ${correct ? 'correct' : 'incorrect'}">
+        <p style="font-weight:600; margin-bottom:2px;">${correct ? '✓ ¡Correcto!' : '✗ Incorrecto'}</p>
+        <p style="font-size:0.85rem;">${escHtml(ex.explanation || '')}</p>
+        ${extra ? `<p style="font-size:0.75rem; opacity:0.8; margin-top:2px;">${extra}</p>` : ''}
+    </div>`;
+}
+
+function nextExercise() {
+    const s = currentSession;
+    s.currentIndex++;
+    if (s.currentIndex >= s.exercises.length) finishExercise();
+    else renderExercise();
+}
+
+/* ============================================================
+   16. RESULTADOS
+   ============================================================ */
+function finishExercise() {
+    const s = currentSession;
+    if (!s) return;
+
+    const total = s.exercises.length;
+    const pct = total ? Math.round((s.score / total) * 100) : 0;
+    const stars = pct >= 85 ? 3 : (pct >= 70 ? 2 : (pct >= 50 ? 1 : 0));
+    const starEls = document.querySelectorAll('#resultsStars .star');
+    starEls.forEach((el, i) => el.classList.toggle('lit', i < stars));
+
+    /* ---- CASTILLO ---- */
+    if (s.castleId) {
+        const c = CASTLES.find(x => x.id === s.castleId);
+        state.castles[s.castleId] = Math.max(castleScore(s.castleId), pct);
+        saveState();
+
+        const passed = pct >= 70;
+
+        document.getElementById('resultsEmoji').textContent = passed ? '🏆' : '📚';
+        document.getElementById('resultsTitle').textContent = passed ? '¡Castillo Conquistado!' : 'Castillo Resistido';
+        document.getElementById('resultsSubtitle').textContent =
+            `Castillo ${c.number} · Templo ${c.templeId} (${c.templeTitle}) · Etapa ${c.stageIndex + 1}`;
+        document.getElementById('resultsScore').textContent = pct + '%';
+        document.getElementById('resultsDetail').textContent = `${s.score} de ${total} correctas`;
+
+        const statusEl = document.getElementById('resultsStatus');
+        statusEl.textContent = passed ? '✅ APROBADO' : '❌ NO APROBADO (necesitas 70%)';
+        statusEl.className = 'status ' + (passed ? 'passed' : 'failed');
+
+        showView('results');
+        updateGlobalProgress();
+        renderMap();
+        return;
+    }
+
+    /* ---- PRÁCTICA LIBRE ---- */
+    document.getElementById('resultsEmoji').textContent = pct >= 85 ? '🌟' : (pct >= 70 ? '🎉' : (pct >= 50 ? '💪' : '📚'));
+    document.getElementById('resultsTitle').textContent = pct >= 85 ? '¡Excelente!' : (pct >= 70 ? '¡Muy bien!' : (pct >= 50 ? 'Buen intento' : 'Sigue practicando'));
+    document.getElementById('resultsSubtitle').textContent = PRACTICE_TYPES.find(p => p.id === s.type)?.name || 'Práctica mixta';
+    document.getElementById('resultsScore').textContent = pct + '%';
+    document.getElementById('resultsDetail').textContent = `${s.score} de ${total} correctas`;
+    document.getElementById('resultsStatus').textContent = '';
+
+    showView('results');
+    updateGlobalProgress();
+}
+
+function templeOfSession(s) {
+    if (!s) return null;
+    if (s.castleId) {
+        const c = CASTLES.find(x => x.id === s.castleId);
+        return c ? c.templeId : null;
+    }
+    return s.templeId;
+}
+
+function retryExercise() {
+    if (!currentSession) return;
+    if (currentSession.castleId) startCastle(currentSession.castleId);
+    else startExercise(currentSession.templeId, currentSession.type);
+}
+
+function goBackToKingdom() {
+    const tid = templeOfSession(currentSession);
+    if (tid) goKingdom(tid);
+    else showView('map');
+}
+
+function quitExercise() {
+    const tid = templeOfSession(currentSession);
+    if (tid) goKingdom(tid);
+    else showView('map');
+}
+
+/* ============================================================
+   17. INICIALIZACIÓN
+   ============================================================ */
+showView('map');
+renderMap();
+
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { renderMap(); }, 200);
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.getElementById('lessonOverlay').classList.contains('active')) {
+        closeLesson();
+    }
+});
+</script>
+
+</body>
+</html>
